@@ -1,0 +1,24 @@
+{
+    "skipTerminateQuickPick": true,
+    "skipSwitchToOutput": false,
+    "skipErrorMessage": true,
+	"commands":
+	[
+        {
+            "text": "mim-tsplay build",
+            "color": "white",
+            "commandType": "script",
+            "command": "build",
+            "alignment": "left",
+            "priority": 1
+        },
+        {
+            "text": "mim-tsplay doc",
+            "color": "pink",
+            "commandType": "script",
+            "command": "typedoc",
+            "alignment": "left",
+            "priority": 1
+        }
+    ]
+}

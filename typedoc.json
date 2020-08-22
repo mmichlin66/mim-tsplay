@@ -1,0 +1,14 @@
+{
+	"mode": "modules",
+    "readme": "none",
+    "name": "Mim-tsplay Reference",
+	"excludeExternals": true,
+	"excludeNotExported": true,
+    "excludePrivate": true,
+    "ignoreCompilerErrors": true,
+	"out": "./reference",
+	"inputFiles": [
+		"./src/Playground.ts",
+		"./src/PlaygroundConfig.ts"
+	]
+}

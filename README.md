@@ -1,0 +1,2 @@
+# TypeScript Playground
+The mim-tsplay library provides editing, compilation and execution capabilities for TypeScript code. It is intended to be used as demonstration of capabilities of certain libraries specified in the configuration. The configuration also specifies a list of example typescript files that can be loaded, edited and executed by the users. The playground provides immediate feedback by compiling the code and displaying the result in the embedded frame.
