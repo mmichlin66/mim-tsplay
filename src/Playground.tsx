@@ -130,9 +130,10 @@ const enum RightPaneState
  */
 export class Playground extends mim.Component
 {
-    constructor()
+    constructor( configFilePath?: string)
     {
         super();
+        this.configFilePath = configFilePath ? configFilePath : ConfigPath;
 
         this.exampleMap.set( ScratchPadFileInfo.path, ScratchPadFileInfo);
     }
@@ -463,7 +464,7 @@ export class Playground extends mim.Component
         try
         {
             progress.setContent( "Loading playground configuration file...")
-            this.config = await fetchFileJsonContent( ConfigPath);
+            this.config = await fetchFileJsonContent( this.configFilePath);
         }
         catch( err)
         {
@@ -666,6 +667,9 @@ export class Playground extends mim.Component
 
 
 
+    // Path to the playground configuration file
+    private configFilePath: string;
+
     // Style definitions for our component
     private sd: PlaygroundStyles;
 
@@ -743,7 +747,7 @@ async function fetchFileJsonContent<T = any>( file: string, rootPath?: string): 
 
 
 // Create global function that can be called from HTML scripts to mount the Playground component
-(window as any).mountPlayground = function( anchor: Node)
+(window as any).mountPlayground = function( anchor: Node, configFilePath?: string)
 {
-    mim.mount( new Playground(), anchor);
+    mim.mount( new Playground( configFilePath), anchor);
 }
