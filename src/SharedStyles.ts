@@ -14,8 +14,8 @@ class SharedStyles extends css.StyleDefinition
 		css.$style( "body", {
             height: "100%",
             margin: 0,
-			fontFamily: " 'Segoe UI, Verdana, Geneva, Tahoma, sans-serif",
-			fontSize: 12,
+			fontFamily: " 'Segoe UI', Verdana, Geneva, Tahoma, sans-serif",
+			fontSize: 14,
         }),
 	]
 
@@ -57,6 +57,8 @@ class SharedStyles extends css.StyleDefinition
 
     spacedHBox = css.$classname( this.hbox, this.spaced);
     spacedVBox = css.$classname( this.vbox, this.spaced);
+
+    smallFont = css.$class({ fontSize: "x-small"})
 }
 
 

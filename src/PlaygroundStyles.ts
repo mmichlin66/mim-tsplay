@@ -97,7 +97,31 @@ export class PlaygroundStyles extends css.StyleDefinition
         padding: [4,0],
         fontWeight: "bold"
     })
+
+    snippetPanel = css.$class({
+        "+": sharedStyles.hbox,
+        alignItems: "flex-start",
+        padding: 8,
+        overflow: "auto"
+    })
+
+    snippetToSelect = css.$class({
+        "+": sharedStyles.vbox,
+        marginLeft: 16,
+    })
+
+    codeSnippetParamPanel = css.$class({
+        alignItems: "stretch",
+        padding: 8
+    })
+
+    codeSnippetParams = css.$classname( sharedStyles.spacedVBox, this.codeSnippetParamPanel);
+
 }
+
+
+
+export let playgroundStyles = css.activate( PlaygroundStyles);
 
 
 

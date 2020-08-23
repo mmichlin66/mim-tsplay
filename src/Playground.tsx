@@ -2,8 +2,8 @@
 import * as css from "mimcss"
 import * as monaco from "monaco-editor";
 import {sharedStyles} from "./SharedStyles";
-import {PlaygroundStyles} from "./PlaygroundStyles";
-import {IExampleInfo, IExtraLibInfo, ExtraLibList, ExampleList, IPlaygroundConfig} from "./PlaygroundConfig";
+import {playgroundStyles} from "./PlaygroundStyles";
+import {IExampleInfo, IExtraLibInfo, IPlaygroundConfig, ICodeSnippetInfo, ITemplateCodeSnippetInfo, ICustomCodeSnippetInfo} from "./PlaygroundConfig";
 
 // import some JS files so that they are included into our bundle
 import "monaco-editor/esm/vs/basic-languages/javascript/javascript";
@@ -11,6 +11,7 @@ import "monaco-editor/esm/vs/basic-languages/typescript/typescript";
 import "monaco-editor/esm/vs/language/typescript/languageFeatures";
 import "monaco-editor/esm/vs/language/typescript/tsMode";
 import "monaco-editor/esm/vs/language/typescript/workerManager";
+import { CodeSnippetChooser, CodeSnippetParams } from "./CodeSnippets";
 
 
 
@@ -42,7 +43,7 @@ const DefaultHtmlTemplate =
 const ScratchPadFileInfo: IExampleInfo = {
     name: "Scratch Pad",
     path: "$",
-    descr: "Initially empty file that preserves your work"
+    description: "Initially empty file that preserves your work"
 };
 
 
@@ -141,8 +142,6 @@ export class Playground extends mim.Component
 
     public async willMount()
     {
-        this.sd = css.activate( PlaygroundStyles);
-
         // set compiler options
         ts.typescriptDefaults.setCompilerOptions({
             target: ts.ScriptTarget.ES2016,
@@ -197,10 +196,13 @@ export class Playground extends mim.Component
                 }
                 catch( err)
                 {
+                    // report errors
                     this.otherErrors = errors;
                     this.rightPaneState = RightPaneState.OtherErrors;
-                    progress.close();
-                    return;
+
+                    // show empty file
+                    this.addOrSelectFile( ScratchPadFileInfo.path, "");
+                    this.currentFileInfo = ScratchPadFileInfo;
                 }
             }
         }
@@ -220,21 +222,19 @@ export class Playground extends mim.Component
             this.editor.dispose()
             this.editor = null;
         }
-
-        css.deactivate( this.sd);
     }
 
     public render(): any
 	{
-        return <div class={this.sd.masterGrid}>
+        return <div class={playgroundStyles.masterGrid}>
             {this.renderEditorToolbar}
             {this.renderHtmlToolbar}
-            <div class={this.sd.leftPane}>
+            <div class={playgroundStyles.leftPane}>
                 <div ref={this.contaierRef} style={{ width: "100%", height: "100%", overflow: "hidden"}} />
             </div>
-            <div class={this.sd.splitter}></div>
+            <div class={playgroundStyles.splitter}></div>
             {this.renderRightPane}
-            <div class={this.sd.statusbar}>
+            <div class={playgroundStyles.statusbar}>
                 Current example: <span>{this.currentFileInfo && this.currentFileInfo.name}</span>
             </div>
         </div>
@@ -242,9 +242,13 @@ export class Playground extends mim.Component
 
     private renderEditorToolbar(): any
 	{
-        return <div class={[this.sd.editorToolbar, sharedStyles.spacedHBox]}>
+        return <div class={[playgroundStyles.editorToolbar, sharedStyles.spacedHBox]}>
             {this.renderExampleList()}
             <button id="run" click={this.onRunClicked} title="Compile code and display results">Run</button>
+            <button id="reload" click={this.onReloadClicked} title="Reload original example code">Reload</button>
+            <button id="insertCodeSnippet" click={this.onInsertCodeSnippetClicked} title="Choose a code snippet to insert into code">
+                Insert Code Snippet
+            </button>
         </div>
     }
 
@@ -285,7 +289,7 @@ export class Playground extends mim.Component
                     }
                 }
 
-                options.push( <optgroup label={info.name} title={info.descr}>
+                options.push( <optgroup label={info.name} title={info.description}>
                     {subOptions}
                 </optgroup>);
             }
@@ -297,14 +301,14 @@ export class Playground extends mim.Component
     private renderExampleOption( info: IExampleInfo): any
 	{
         let selected = this.currentFileInfo && info.path === this.currentFileInfo.path;
-        return <option value={info.path} title={info.descr} selected={selected}>
+        return <option value={info.path} title={info.description} selected={selected}>
             {info.name}
         </option>;
     }
 
     private renderHtmlToolbar(): any
 	{
-        return <div class={[this.sd.htmlToolbar, sharedStyles.spacedHBox]}>
+        return <div class={[playgroundStyles.htmlToolbar, sharedStyles.spacedHBox]}>
             <button id="run" click={this.onClearClicked} title="Clear the right pane">Clear</button>
         </div>
     }
@@ -315,21 +319,21 @@ export class Playground extends mim.Component
         switch( this.rightPaneState)
         {
             case RightPaneState.CompilationErrors:
-                content = <div class={this.sd.compilationErrorsGrid}>
-                    <span class={this.sd.errorsTitle}>There were compilation errors. Fix them and try again.</span>
+                content = <div class={playgroundStyles.compilationErrorsGrid}>
+                    <span class={playgroundStyles.errorsTitle}>There were compilation errors. Fix them and try again.</span>
                     {this.compilationErrors.map( e => this.renderCompilationError(e))}
                 </div>;
                 break;
 
             case RightPaneState.OtherErrors:
-                content = <div class={this.sd.otherErrorsList}>
-                    <span class={this.sd.errorsTitle}>There are errors.</span>
+                content = <div class={playgroundStyles.otherErrorsList}>
+                    <span class={playgroundStyles.errorsTitle}>There are errors.</span>
                     {this.otherErrors.map( e => this.renderOtherError(e))}
                 </div>;
                 break;
 
             case RightPaneState.HTML:
-                content = <iframe srcdoc={this.currentHtml} class={this.sd.iframe} />;
+                content = <iframe srcdoc={this.currentHtml} class={playgroundStyles.iframe} />;
                 break
 
             default:
@@ -337,7 +341,7 @@ export class Playground extends mim.Component
                 break
         }
 
-        return <div class={this.sd.rightPane}>{content}</div>
+        return <div class={playgroundStyles.rightPane}>{content}</div>
     }
 
     private renderCompilationError( e: ICompilationErrorInfo): any
@@ -428,6 +432,41 @@ export class Playground extends mim.Component
         this.editor.focus();
     }
 
+    private async onReloadClicked(): Promise<void>
+    {
+    }
+
+    private async onInsertCodeSnippetClicked(): Promise<void>
+    {
+        let snippet = await new CodeSnippetChooser( this.codeSnippetMap).showModal() as ICodeSnippetInfo;
+        if (!snippet)
+            return;
+
+        let codeToInsert: string;
+        if ("template" in snippet)
+        {
+            let templateSnippet = snippet as ITemplateCodeSnippetInfo;
+            // if the code snippet has parameters, display the dialog where the user can provide
+            // values
+            if (templateSnippet.params && templateSnippet.params.length > 0)
+            {
+                codeToInsert = await new CodeSnippetParams( templateSnippet).showModal();
+                if (!codeToInsert)
+                    return;
+            }
+        }
+        else
+            codeToInsert = await (snippet as ICustomCodeSnippetInfo).createSnippet();
+
+        if (!this.editor.hasTextFocus)
+            this.editor.focus();
+
+        let selection = this.editor.getSelection();
+        let range = new monaco.Range( selection.startLineNumber, selection.startColumn, selection.endLineNumber, selection.endColumn);
+        let op = {identifier: { major: 1, minor: 1 }, range: range, text: codeToInsert, forceMoveMarkers: true};
+        this.editor.executeEdits( "snippet", [op]);
+    }
+
     private onClearClicked(): void
     {
         this.clearRighPaneData();
@@ -475,9 +514,10 @@ export class Playground extends mim.Component
         // parse the configuration and accumulate errors
         let errors: Error[] = [];
 
-        if (this.config.extraLibList && this.config.extraLibList.length > 0)
+        // parse extra libraries
+        if (this.config.extraLibs && this.config.extraLibs.length > 0)
         {
-            this.extraLibList = this.config.extraLibList;
+            this.extraLibList = this.config.extraLibs;
 
             // add extra libraries (files with typings)
             for( let libInfo of this.extraLibList)
@@ -511,16 +551,37 @@ export class Playground extends mim.Component
             }
         }
 
-
-        if (this.config.exampleList && this.config.exampleList.length > 0)
+        // parse examples
+        if (this.config.examples && this.config.examples.length > 0)
         {
-            this.exampleList.splice( 1, 0, ...this.config.exampleList);
+            this.exampleList.splice( 1, 0, ...this.config.examples);
 
             // our internal map contains only real examples with paths - not group names
-            this.config.exampleList.forEach( info => {
+            this.config.examples.forEach( info => {
                 if (info.path)
                     this.exampleMap.set( info.path, info);
             });
+        }
+
+        // parse code snippets
+        if (this.config.codeSnippets && this.config.codeSnippets.length > 0)
+        {
+            for( let info of this.config.codeSnippets)
+            {
+                // skip code snippets if category is not specified
+                if (!info.category)
+                    continue;
+
+                // check whether we already have this category and obtain the array of snippes
+                let snippets: ICodeSnippetInfo[] = this.codeSnippetMap.get( info.category);
+                if (!snippets)
+                {
+                    snippets = [];
+                    this.codeSnippetMap.set( info.category, snippets);
+                }
+
+                snippets.push( info);
+            };
         }
 
         return errors;
@@ -670,21 +731,21 @@ export class Playground extends mim.Component
     // Path to the playground configuration file
     private configFilePath: string;
 
-    // Style definitions for our component
-    private sd: PlaygroundStyles;
-
     // Configuration information.
     private config: IPlaygroundConfig;
 
     // List of extra libraries read from the extra-lib-list JSON file. It is initially empty.
-    private extraLibList: ExtraLibList;
+    private extraLibList: IExtraLibInfo[];
 
     // Example list read from the example-list JSON file. It initially contains the scratch file
     // information as the first item.
-    private exampleList: ExampleList = [ScratchPadFileInfo];
+    private exampleList: IExampleInfo[] = [ScratchPadFileInfo];
 
     // Map of example paths to ExampleInfo objects
     private exampleMap = new Map<string,IExampleInfo>();
+
+    // Map of code snippet category names to arrays of code snippet objects
+    private codeSnippetMap = new Map<string,ICodeSnippetInfo[]>();
 
     // Current file selected in the monaco editor
     @mim.trigger
