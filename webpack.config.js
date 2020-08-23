@@ -1,16 +1,20 @@
 const MonacoPlugin = require("monaco-editor-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 
 
 function config( isDev)
 {
     var jsSuffix = isDev ? ".dev.js" : ".js";
+    var htmlSuffix = isDev ? ".dev.html" : ".html";
 
     return {
         entry: "./lib/index.js",
+        // entry: { "mim-tsplay": './lib/index.js' },
 
         output:
         {
             filename: "mim-tsplay" + jsSuffix,
+            chunkFilename: "[name]" + ".mim-tsplay" + jsSuffix,
             path: __dirname + "/lib",
             library: 'mim-tsplay',
             libraryTarget: 'umd',
@@ -34,17 +38,55 @@ function config( isDev)
 
         plugins: [
             new MonacoPlugin({
-                languages: ["typescript"],
+                // languages: ["typescript"],
                 filename: "[name].worker" + jsSuffix,
             }),
 
+            new CopyPlugin({
+                patterns: [
+                    { from: "test/index" + htmlSuffix },
+
+                    // { from: "node_modules/mimcss/lib/mimcss" + jsSuffix },
+                    { from: "node_modules/mimcss/lib/index.d.ts", to: "mimcss/" },
+                    { from: "node_modules/mimcss/lib/styles/UtilTypes.d.ts", to: "mimcss/styles/" },
+                    { from: "node_modules/mimcss/lib/styles/ColorTypes.d.ts", to: "mimcss/styles/" },
+                    { from: "node_modules/mimcss/lib/styles/ImageTypes.d.ts", to: "mimcss/styles/" },
+                    { from: "node_modules/mimcss/lib/styles/StyleTypes.d.ts", to: "mimcss/styles/" },
+                    { from: "node_modules/mimcss/lib/styles/SelectorTypes.d.ts", to: "mimcss/styles/" },
+                    { from: "node_modules/mimcss/lib/styles/MediaTypes.d.ts", to: "mimcss/styles/" },
+                    { from: "node_modules/mimcss/lib/styles/FontFaceTypes.d.ts", to: "mimcss/styles/" },
+                    { from: "node_modules/mimcss/lib/rules/RuleTypes.d.ts", to: "mimcss/rules" },
+                    { from: "node_modules/mimcss/lib/api/UtilAPI.d.ts", to: "mimcss/api/" },
+                    { from: "node_modules/mimcss/lib/api/ColorAPI.d.ts", to: "mimcss/api/" },
+                    { from: "node_modules/mimcss/lib/api/ImageAPI.d.ts", to: "mimcss/api/" },
+                    { from: "node_modules/mimcss/lib/api/StyleAPI.d.ts", to: "mimcss/api/" },
+                    { from: "node_modules/mimcss/lib/api/RuleAPI.d.ts", to: "mimcss/api/" },
+                    { from: "node_modules/mimcss/lib/api/SchedulingAPI.d.ts", to: "mimcss/api/" },
+
+                    // { from: "node_modules/mimbl/lib/mimbl" + jsSuffix },
+                    { from: "node_modules/mimbl/lib/index.d.ts", to: "mimbl/" },
+                    { from: "node_modules/mimbl/lib/utils/EventSlot.d.ts", to: "mimbl/utils/" },
+                    { from: "node_modules/mimbl/lib/utils/TriggerWatcher.d.ts", to: "mimbl/utils/" },
+                    { from: "node_modules/mimbl/lib/api/UtilAPI.d.ts", to: "mimbl/api/" },
+                    { from: "node_modules/mimbl/lib/api/HtmlTypes.d.ts", to: "mimbl/api/" },
+                    { from: "node_modules/mimbl/lib/api/SvgTypes.d.ts", to: "mimbl/api/" },
+                    { from: "node_modules/mimbl/lib/api/mim.d.ts", to: "mimbl/api/" },
+                    { from: "node_modules/mimbl/lib/comp/Popups.d.ts", to: "mimbl/comp/" },
+
+                    { from: "test/require.js" },
+                    { from: "test/playground-config.json" },
+                    { context: "test/", from: "examples/", to: "examples/" },
+                ],
+            })
         ],
 
-        externals:
-        {
-            mimcss: { root: 'mimcss', commonjs2: 'mimcss', commonjs: 'mimcss', amd: 'mimcss' },
-            mimbl: { root: 'mimbl', commonjs2: 'mimbl', commonjs: 'mimbl', amd: 'mimbl' },
-        }
+        // optimization: { splitChunks: { chunks: 'all' } },
+
+        // externals:
+        // {
+        //     mimcss: { root: 'mimcss', commonjs2: 'mimcss', commonjs: 'mimcss', amd: 'mimcss' },
+        //     mimbl: { root: 'mimbl', commonjs2: 'mimbl', commonjs: 'mimbl', amd: 'mimbl' },
+        // }
     }
 }
 

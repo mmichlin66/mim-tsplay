@@ -494,11 +494,11 @@ export class Playground extends mim.Component
 
                 // fetch all files and add them to the TS system
                 let libRootPath = `file:///node_modules/${libInfo.libName}`;
+                progress.setContent( `Loading library '${libInfo.libName}'...`)
                 for( let file of libInfo.files)
                 {
                     try
                     {
-                        progress.setContent( `Loading file '${file}'...`)
                         let fileContent = await fetchFileTextContent( file, libInfo.rootPath);
                         let filePath = file === libInfo.index ? "index.d.ts" : file;
                         ts.typescriptDefaults.addExtraLib( fileContent, `${libRootPath}/${filePath}`)
@@ -747,7 +747,7 @@ async function fetchFileJsonContent<T = any>( file: string, rootPath?: string): 
 
 
 // Create global function that can be called from HTML scripts to mount the Playground component
-(window as any).mountPlayground = function( anchor: Node, configFilePath?: string)
+(window as any).mountPlayground = function( anchor?: Node, configFilePath?: string)
 {
     mim.mount( new Playground( configFilePath), anchor);
 }
