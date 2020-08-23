@@ -46,7 +46,7 @@ function config( isDev)
                 patterns: [
                     { from: "test/index" + htmlSuffix },
 
-                    // { from: "node_modules/mimcss/lib/mimcss" + jsSuffix },
+                    { from: "node_modules/mimcss/lib/mimcss" + jsSuffix },
                     { from: "node_modules/mimcss/lib/index.d.ts", to: "mimcss/" },
                     { from: "node_modules/mimcss/lib/styles/UtilTypes.d.ts", to: "mimcss/styles/" },
                     { from: "node_modules/mimcss/lib/styles/ColorTypes.d.ts", to: "mimcss/styles/" },
@@ -63,7 +63,7 @@ function config( isDev)
                     { from: "node_modules/mimcss/lib/api/RuleAPI.d.ts", to: "mimcss/api/" },
                     { from: "node_modules/mimcss/lib/api/SchedulingAPI.d.ts", to: "mimcss/api/" },
 
-                    // { from: "node_modules/mimbl/lib/mimbl" + jsSuffix },
+                    { from: "node_modules/mimbl/lib/mimbl" + jsSuffix },
                     { from: "node_modules/mimbl/lib/index.d.ts", to: "mimbl/" },
                     { from: "node_modules/mimbl/lib/utils/EventSlot.d.ts", to: "mimbl/utils/" },
                     { from: "node_modules/mimbl/lib/utils/TriggerWatcher.d.ts", to: "mimbl/utils/" },
