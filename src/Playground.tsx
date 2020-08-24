@@ -49,77 +49,10 @@ const ScratchPadFileInfo: IExampleInfo = {
 
 
 /**
- * The ICompilationResult interface represents the result of compilation of the code in the editor.
+ * Set of registered extension classes. Every Playground instance will create a new instance of
+ * each registered extension.
  */
-export interface ICompilationResult
-{
-    // Flag whether file emittion was skipped
-    emitSkipped: boolean;
-
-    // Array of objects representing errors - both syntax and semantic.
-    errors: ICompilationErrorInfo[],
-
-    // Array of file names and their text content
-    outputFiles: { name: string, text: string}[];
-}
-
-
-
-/**
- * The ICompilationErrorInfo interface represents a single compilation error or warning.
- */
-export interface ICompilationErrorInfo
-{
-    // True for syntax errors and false for semantic ones.
-    isSyntax: boolean;
-
-    // Category
-    category: CompilationIssueCategory;
-
-    // Category
-    code: number;
-
-    // Row number in the file
-    message: string;
-
-    // Row number in the file
-    row: number;
-
-    // Column number in the row
-    col: number;
-
-    // Length of the offending code
-    length: number;
-
-    // Array of objects representing errors - both syntax and semantic.
-    diag: monaco.languages.typescript.Diagnostic,
-}
-
-
-
-/**
- * Reported error categories.
- */
-export const enum CompilationIssueCategory
-{
-    Warning = 0,
-    Error = 1,
-    Suggestion = 2,
-    Message = 3,
-}
-
-
-
-// Enumeration defining possible states of the right pane
-const enum RightPaneState
-{
-    Clear = 1,
-    Welcome,
-    HTML,
-    CompilationErrors,
-    OtherErrors,
-    Instructions,
-}
+let registeredExtensions = new Set<IPlaygroundExtensionClass>();
 
 
 
@@ -129,7 +62,7 @@ const enum RightPaneState
  * which is embedded in a simple HTML file. The content of the HTML file is then displayed in
  * an IFRAME.
  */
-export class Playground extends mim.Component
+class Playground extends mim.Component
 {
     constructor( configFilePath?: string)
     {
@@ -371,30 +304,23 @@ export class Playground extends mim.Component
         if (!path)
             return;
 
-        this.clearRighPaneData();
-        let fileInfo = this.exampleMap.get( path);
-        if (fileInfo === ScratchPadFileInfo)
+        this.showExample( path);
+    }
+
+    private async onReloadClicked(): Promise<void>
+    {
+        if (!this.currentFileInfo)
+            return;
+
+        let path = this.currentFileInfo.path;
+        let model = this.files.get( path);
+        if (model)
         {
-            this.addOrSelectFile( ScratchPadFileInfo.path, "");
-            this.currentFileInfo = ScratchPadFileInfo;
-        }
-        else
-        {
-            try
-            {
-                let promise = this.loadOrSelectFile( path);
-                mim.ProgressBox.showUntil( promise, `Loading file '${path}'...`, "Please wait");
-                await promise;
-                this.currentFileInfo = fileInfo;
-            }
-            catch( err)
-            {
-                this.otherErrors = [err];
-                this.rightPaneState = RightPaneState.OtherErrors;
-            }
+            model.dispose();
+            this.files.delete( path);
         }
 
-        this.editor.focus();
+        this.showExample( path);
     }
 
     private async onRunClicked(): Promise<void>
@@ -432,10 +358,6 @@ export class Playground extends mim.Component
         this.editor.focus();
     }
 
-    private async onReloadClicked(): Promise<void>
-    {
-    }
-
     private async onInsertCodeSnippetClicked(): Promise<void>
     {
         let snippet = await new CodeSnippetChooser( this.codeSnippetMap).showModal() as ICodeSnippetInfo;
@@ -446,20 +368,21 @@ export class Playground extends mim.Component
         if ("template" in snippet)
         {
             let templateSnippet = snippet as ITemplateCodeSnippetInfo;
-            // if the code snippet has parameters, display the dialog where the user can provide
-            // values
+
+            // if the snippet has parameters, display the dialog where the user can provide/ values
             if (templateSnippet.params && templateSnippet.params.length > 0)
             {
                 codeToInsert = await new CodeSnippetParams( templateSnippet).showModal();
                 if (!codeToInsert)
                     return;
             }
+            else
+                codeToInsert = templateSnippet.template;
         }
         else
             codeToInsert = await (snippet as ICustomCodeSnippetInfo).createSnippet();
 
-        if (!this.editor.hasTextFocus)
-            this.editor.focus();
+        this.editor.focus();
 
         let selection = this.editor.getSelection();
         let range = new monaco.Range( selection.startLineNumber, selection.startColumn, selection.endLineNumber, selection.endColumn);
@@ -499,95 +422,169 @@ export class Playground extends mim.Component
      */
     private async loadConfig( progress: mim.ProgressBox): Promise<Error[]>
     {
+        // parse the configuration and accumulate errors
+        let errors: Error[] = [];
+
         // read configuration file; if we can't, create an empty configuration
+        progress.setContent( "Loading playground configuration file...")
         try
         {
-            progress.setContent( "Loading playground configuration file...")
             this.config = await fetchFileJsonContent( this.configFilePath);
         }
         catch( err)
         {
             this.config = {};
-            return [err];
+            errors.push(err);
         }
 
-        // parse the configuration and accumulate errors
-        let errors: Error[] = [];
+        this.addExtraLibs( this.config.extraLibs, errors, progress);
+        this.addExamples( this.config.examples, errors, progress);
+        this.addCodeSnippets( this.config.codeSnippets, errors, progress);
 
-        // parse extra libraries
-        if (this.config.extraLibs && this.config.extraLibs.length > 0)
-        {
-            this.extraLibList = this.config.extraLibs;
-
-            // add extra libraries (files with typings)
-            for( let libInfo of this.extraLibList)
-            {
-                if (!libInfo.libName)
-                {
-                    errors.push( new Error( "Empty name specified for external library in configuration"));
-                    continue;
-                }
-                else if (this.extraLibInfos.has( libInfo.libName))
-                    continue;
-                else
-                    this.extraLibInfos.set( libInfo.libName, libInfo);
-
-                // fetch all files and add them to the TS system
-                let libRootPath = `file:///node_modules/${libInfo.libName}`;
-                progress.setContent( `Loading library '${libInfo.libName}'...`)
-                for( let file of libInfo.files)
-                {
-                    try
-                    {
-                        let fileContent = await fetchFileTextContent( file, libInfo.rootPath);
-                        let filePath = file === libInfo.index ? "index.d.ts" : file;
-                        ts.typescriptDefaults.addExtraLib( fileContent, `${libRootPath}/${filePath}`)
-                    }
-                    catch( err)
-                    {
-                        errors.push( err);
-                    }
-                }
-            }
-        }
-
-        // parse examples
-        if (this.config.examples && this.config.examples.length > 0)
-        {
-            this.exampleList.splice( 1, 0, ...this.config.examples);
-
-            // our internal map contains only real examples with paths - not group names
-            this.config.examples.forEach( info => {
-                if (info.path)
-                    this.exampleMap.set( info.path, info);
-            });
-        }
-
-        // parse code snippets
-        if (this.config.codeSnippets && this.config.codeSnippets.length > 0)
-        {
-            for( let info of this.config.codeSnippets)
-            {
-                // skip code snippets if category is not specified
-                if (!info.category)
-                    continue;
-
-                // check whether we already have this category and obtain the array of snippes
-                let snippets: ICodeSnippetInfo[] = this.codeSnippetMap.get( info.category);
-                if (!snippets)
-                {
-                    snippets = [];
-                    this.codeSnippetMap.set( info.category, snippets);
-                }
-
-                snippets.push( info);
-            };
-        }
-
+        // load extensions if specified
+        registeredExtensions.forEach( ext => this.loadExtension( ext, errors, progress));
         return errors;
     }
 
+    /**
+     * Adds extra libraries to the editor.
+     */
+    private async loadExtension( extClass: IPlaygroundExtensionClass, errors: Error[], progress: mim.ProgressBox): Promise<void>
+    {
+        progress.setContent( `Loading playground extension '${extClass.displayName}'...`);
 
+        try
+        {
+            let ext = new extClass();
+            this.addExtraLibs( ext.getExtraLibs(), errors, progress);
+            this.addExamples( ext.getExamples(), errors, progress);
+            this.addCodeSnippets( ext.getCodeSnippets(), errors, progress);
+        }
+        catch( err)
+        {
+            errors.push(err);
+        }
+    }
+
+    /**
+     * Adds extra libraries to the editor.
+     */
+    private async addExtraLibs( extraLibs: IExtraLibInfo[], errors: Error[], progress: mim.ProgressBox): Promise<void>
+    {
+        // parse extra libraries
+        if (!extraLibs || extraLibs.length === 0)
+            return;
+
+        this.extraLibList = this.config.extraLibs;
+
+        // add extra libraries (files with typings)
+        for( let libInfo of this.extraLibList)
+        {
+            if (!libInfo.libName)
+            {
+                errors.push( new Error( "Empty name specified for external library in configuration"));
+                continue;
+            }
+            else if (this.extraLibInfos.has( libInfo.libName))
+                continue;
+            else
+                this.extraLibInfos.set( libInfo.libName, libInfo);
+
+            // fetch all files and add them to the TS system
+            let libRootPath = `file:///node_modules/${libInfo.libName}`;
+            progress.setContent( `Loading library '${libInfo.libName}'...`)
+            for( let file of libInfo.files)
+            {
+                try
+                {
+                    let fileContent = await fetchFileTextContent( file, libInfo.rootPath);
+                    let filePath = file === libInfo.index ? "index.d.ts" : file;
+                    ts.typescriptDefaults.addExtraLib( fileContent, `${libRootPath}/${filePath}`)
+                }
+                catch( err)
+                {
+                    errors.push( err);
+                }
+            }
+        }
+    }
+
+    /**
+     * Adds examples.
+     */
+    private async addExamples( examples: IExampleInfo[], errors: Error[], progress: mim.ProgressBox): Promise<void>
+    {
+        // parse examples
+        if (!examples || examples.length === 0)
+            return;
+
+        // our internal map contains only real examples with paths - not group names
+        for( let info of examples)
+        {
+            this.exampleList.push( info);
+            if (info.path)
+                this.exampleMap.set( info.path, info);
+        }
+    }
+
+    /**
+     * Adds code snippets.
+     */
+    private async addCodeSnippets( snippets: ICodeSnippetInfo[], errors: Error[], progress: mim.ProgressBox): Promise<void>
+    {
+        if (snippets! && snippets.length === 0)
+            return;
+
+        for( let info of snippets)
+        {
+            // skip code snippets if category is not specified
+            if (!info.category)
+                continue;
+
+            // check whether we already have this category and obtain the array of snippes
+            let categorySnippets: ICodeSnippetInfo[] = this.codeSnippetMap.get( info.category);
+            if (!categorySnippets)
+            {
+                categorySnippets = [];
+                this.codeSnippetMap.set( info.category, categorySnippets);
+            }
+
+            categorySnippets.push( info);
+        };
+    }
+
+
+
+    /**
+     * Loads example with the given path.
+     */
+    private async showExample( path: string): Promise<void>
+    {
+        this.clearRighPaneData();
+        let fileInfo = this.exampleMap.get( path);
+        if (fileInfo === ScratchPadFileInfo)
+        {
+            this.addOrSelectFile( ScratchPadFileInfo.path, "");
+            this.currentFileInfo = ScratchPadFileInfo;
+        }
+        else
+        {
+            try
+            {
+                let promise = this.loadOrSelectFile( path);
+                mim.ProgressBox.showUntil( promise, `Loading file '${path}'...`, "Please wait");
+                await promise;
+                this.currentFileInfo = fileInfo;
+            }
+            catch( err)
+            {
+                this.otherErrors = [err];
+                this.rightPaneState = RightPaneState.OtherErrors;
+            }
+        }
+
+        this.editor.focus();
+    }
 
     /**
      * Adds a file with the given content to the editor. If the file with the given path already
@@ -784,6 +781,135 @@ export class Playground extends mim.Component
 
 
 
+/**
+ * The ICompilationResult interface represents the result of compilation of the code in the editor.
+ */
+interface ICompilationResult
+{
+    // Flag whether file emittion was skipped
+    emitSkipped: boolean;
+
+    // Array of objects representing errors - both syntax and semantic.
+    errors: ICompilationErrorInfo[],
+
+    // Array of file names and their text content
+    outputFiles: { name: string, text: string}[];
+}
+
+
+
+/**
+ * The ICompilationErrorInfo interface represents a single compilation error or warning.
+ */
+interface ICompilationErrorInfo
+{
+    // True for syntax errors and false for semantic ones.
+    isSyntax: boolean;
+
+    // Category
+    category: CompilationIssueCategory;
+
+    // Category
+    code: number;
+
+    // Row number in the file
+    message: string;
+
+    // Row number in the file
+    row: number;
+
+    // Column number in the row
+    col: number;
+
+    // Length of the offending code
+    length: number;
+
+    // Array of objects representing errors - both syntax and semantic.
+    diag: monaco.languages.typescript.Diagnostic,
+}
+
+
+
+/**
+ * Reported error categories.
+ */
+const enum CompilationIssueCategory
+{
+    Warning = 0,
+    Error = 1,
+    Suggestion = 2,
+    Message = 3,
+}
+
+
+
+// Enumeration defining possible states of the right pane
+const enum RightPaneState
+{
+    Clear = 1,
+    Welcome,
+    HTML,
+    CompilationErrors,
+    OtherErrors,
+    Instructions,
+}
+
+
+
+/**
+ * The IPlaygroundExtension interface represents an object that provides additional features to the
+ * playground. These features include custom code snippets, help items and others.
+ */
+export interface IPlaygroundExtension
+{
+    /**
+     * Returns a list of extra library objects providing information about type files that will
+     * be added to the editor for type checking.
+     */
+    getExtraLibs(): IExtraLibInfo[];
+
+    /**
+     * Returns a list of examples.
+     */
+    getExamples(): IExampleInfo[];
+
+    /**
+     * Returns a list of code snippets. Extensions can provide regular template-based snippets, but
+     * they can also implement custom snippets with arbitrary UI.
+     */
+    getCodeSnippets(): ICodeSnippetInfo[];
+}
+
+
+
+/**
+ * The IPlaygroundExtnsionClass interface represents a constructor that creates IPlaygroundExtension
+ * objects.
+ */
+export interface IPlaygroundExtensionClass
+{
+    new (): IPlaygroundExtension;
+
+    /** User friendly extension name */
+    readonly displayName: string;
+}
+
+
+
+/**
+ * Registers the given extensions
+ * @param extensionClass Constuctor interface representing the extension class.
+ * @returns True if the extension was successfully registered and false otherwise. False is
+ * returned if the extension tries to register itself multiple times.
+ */
+export function registerExtension( extensionClass: IPlaygroundExtensionClass): boolean
+{
+    // check if we already have this etension in our set
+    if (registeredExtensions.has( extensionClass))
+        return false;
+
+    registeredExtensions.add( extensionClass);
+}
 
 
 

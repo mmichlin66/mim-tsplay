@@ -43,6 +43,10 @@
     },
     "files": [
         "lib/mim-tsplay.js",
-        "lib/index.d.ts"
+        "lib/index.d.ts",
+        "lib/Playground.d.ts",
+        "lib/PlaygroundConfig.d.ts",
+        "lib/PlaygroundStyles.d.ts",
+        "lib/SharedStyles.d.ts"
     ]
 }

@@ -5,7 +5,7 @@
 class SharedStyles extends css.StyleDefinition
 {
 	init = [
-		css.$style( "*", {
+		css.$style( "*, *::before, *::after", {
 			boxSizing: "border-box",
 		}),
 

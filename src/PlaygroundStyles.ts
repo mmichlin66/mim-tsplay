@@ -105,6 +105,12 @@ export class PlaygroundStyles extends css.StyleDefinition
         overflow: "auto"
     })
 
+    snippetCategory = css.$class({
+        "+": sharedStyles.vbox,
+        gap: 8,
+        width: "12em"
+    })
+
     snippetToSelect = css.$class({
         "+": sharedStyles.vbox,
         marginLeft: 16,

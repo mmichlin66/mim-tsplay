@@ -1,5 +1,5 @@
 ﻿/**
- * The IPlaygroundConfig represents configuration data tht is fetched from a file. This data
+ * The IPlaygroundConfig interface represents configuration data tht is fetched from a file. This data
  * contain information about:
  *
  * - extra libraries to load into the editor

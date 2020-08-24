@@ -82,11 +82,11 @@ function config( isDev)
 
         // optimization: { splitChunks: { chunks: 'all' } },
 
-        // externals:
-        // {
-        //     mimcss: { root: 'mimcss', commonjs2: 'mimcss', commonjs: 'mimcss', amd: 'mimcss' },
-        //     mimbl: { root: 'mimbl', commonjs2: 'mimbl', commonjs: 'mimbl', amd: 'mimbl' },
-        // }
+        externals:
+        {
+            mimcss: { root: 'mimcss', commonjs2: 'mimcss', commonjs: 'mimcss', amd: 'mimcss' },
+            mimbl: { root: 'mimbl', commonjs2: 'mimbl', commonjs: 'mimbl', amd: 'mimbl' },
+        }
     }
 }
 

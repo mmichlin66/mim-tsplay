@@ -3,12 +3,11 @@ import * as css from "mimcss"
 import {sharedStyles} from "./SharedStyles";
 import {playgroundStyles} from "./PlaygroundStyles";
 import {ICodeSnippetInfo, ITemplateCodeSnippetInfo, ITemplateCodeSnippetParamInfo} from "./PlaygroundConfig";
-import { MsgBoxButtonBar, MsgBoxIcon } from "mimbl";
 
 
 
 /**
- * A dialog that allows the user to choose a code snippet to be inserted
+ * A dialog that allows the user to choose a code snippet to be inserted.
  */
 export class CodeSnippetChooser extends mim.Dialog
 {
@@ -31,7 +30,7 @@ export class CodeSnippetChooser extends mim.Dialog
 
     private renderCategory( category: string, snippets: ICodeSnippetInfo[]): any
     {
-        return <div class={sharedStyles.spacedVBox}>
+        return <div class={playgroundStyles.snippetCategory}>
             <strong>{category}</strong>
             {snippets.map( info =>
                 <div class={playgroundStyles.snippetToSelect}>
@@ -55,7 +54,7 @@ export class CodeSnippetChooser extends mim.Dialog
 
 
 /**
- * A dialog that allows the user to choose a code snippet to be inserted
+ * A dialog that allows the user to provide values for code snippet parameters.
  */
 export class CodeSnippetParams extends mim.Dialog
 {
@@ -107,7 +106,7 @@ export class CodeSnippetParams extends mim.Dialog
         if (elmsWithErrors.length > 0)
         {
             await mim.MsgBox.showModal( "Please provide values for required parameters", "Parameters",
-                MsgBoxButtonBar.OK, MsgBoxIcon.Warning);
+                mim.MsgBoxButtonBar.OK, mim.MsgBoxIcon.Warning);
             return;
         }
 

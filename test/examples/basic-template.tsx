@@ -5,6 +5,8 @@ import * as css from "mimcss"
 // Define styles for our component
 class MyStyles extends css.StyleDefinition
 {
+    cls1 = css.$class({
+    })
 }
 
 // activate our styles
@@ -15,7 +17,9 @@ class MyComponent extends mim.Component
 {
 	public render()
 	{
-		return <div/>
+		return <div class={styles.cls1}>
+            Hello
+        </div>
 	}
 }
 
