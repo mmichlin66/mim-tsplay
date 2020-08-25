@@ -3,7 +3,11 @@ import * as css from "mimcss"
 import * as monaco from "monaco-editor";
 import {sharedStyles} from "./SharedStyles";
 import {playgroundStyles} from "./PlaygroundStyles";
-import {IExampleInfo, IExtraLibInfo, IPlaygroundConfig, ICodeSnippetInfo, ITemplateCodeSnippetInfo, ICustomCodeSnippetInfo} from "./PlaygroundConfig";
+import {
+    IExampleInfo, IExtraLibInfo, IPlaygroundConfig, ICodeSnippetInfo, ITemplateCodeSnippetInfo,
+    ICustomCodeSnippetInfo
+} from "./PlaygroundConfig";
+import {CodeSnippetChooser, CodeSnippetParams} from "./CodeSnippets";
 
 // import some JS files so that they are included into our bundle
 import "monaco-editor/esm/vs/basic-languages/javascript/javascript";
@@ -11,7 +15,6 @@ import "monaco-editor/esm/vs/basic-languages/typescript/typescript";
 import "monaco-editor/esm/vs/language/typescript/languageFeatures";
 import "monaco-editor/esm/vs/language/typescript/tsMode";
 import "monaco-editor/esm/vs/language/typescript/workerManager";
-import { CodeSnippetChooser, CodeSnippetParams } from "./CodeSnippets";
 
 
 
@@ -360,6 +363,13 @@ class Playground extends mim.Component
 
     private async onInsertCodeSnippetClicked(): Promise<void>
     {
+        if (this.codeSnippetMap.size === 0)
+        {
+            await mim.MsgBox.showModal( "No code snippets defined in playground configuration",
+                    "Playground", mim.MsgBoxButtonBar.OK, mim.MsgBoxIcon.Info);
+            return;
+        }
+
         let snippet = await new CodeSnippetChooser( this.codeSnippetMap).showModal() as ICodeSnippetInfo;
         if (!snippet)
             return;
@@ -532,7 +542,7 @@ class Playground extends mim.Component
      */
     private async addCodeSnippets( snippets: ICodeSnippetInfo[], errors: Error[], progress: mim.ProgressBox): Promise<void>
     {
-        if (snippets! && snippets.length === 0)
+        if (!snippets || snippets.length === 0)
             return;
 
         for( let info of snippets)
