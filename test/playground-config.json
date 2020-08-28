@@ -62,6 +62,11 @@
             "path": "examples/gradients.tsx",
             "description": "Demonstrates creating CSS gradients."
         },
+        {
+            "name": "Dynamic CSS Properties",
+            "path": "examples/custom-props-animation.tsx",
+            "description": "Demonstrates defining CSS properties and setting them dynamically."
+        },
 
         { "name": "Advanced" },
         {
