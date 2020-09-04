@@ -9,29 +9,29 @@ import * as mim from "mimbl";
 import * as css from "mimcss"
 
 
-// Define styles for our component
 class MyStyles extends css.StyleDefinition
 {
+    // define custom properties whose values will be changed by user actions
     translate = css.$var( "CssLength", 0)
-    scale = css.$var( "scale", 1)
-    rotate = css.$var( "rotate", 0)
+    scale = css.$var( "CssNumber", 1)
+    rotate = css.$var( "CssAngle", 0)
+
+    // define custom properties which will be defined differently under different elements
     hue = css.$var( "CssAngle")
     duration = css.$var( "CssTime")
 
     mover = css.$class({
+        // define propeties common for all "movers"
+        width: css.vmin(15),
+        height: css.vmin(15),
+        borderRadius: css.percent(10),
+
+        // define transform using the custom properties whose values are controled by user
         transform: [
             css.translateX( this.translate),
             css.scale( this.scale),
             css.rotate( this.rotate)
         ],
-
-        transition: { property: "transform", duration: this.duration, func: "linear" },
-        willChange: "transform",
-
-        background: css.hsl( this.hue, 90, 52),
-        width: "15vmin",
-        height: "15vmin",
-        borderRadius: "10%",
 
         // redefine custom properties to give each block a different color and transition duration
         ":nth-of-type": [
@@ -39,47 +39,56 @@ class MyStyles extends css.StyleDefinition
             [2, { "--": [ [this.hue, 0], [this.duration, 3000] ] }],
             [3, { "--": [ [this.hue, 40], [this.duration, 4000] ] }],
             [4, { "--": [ [this.hue, 200], [this.duration, 5000] ] }],
-        ]
+        ],
+
+        // define transition using the custom property for duration
+        transition: { property: "transform", duration: this.duration, func: "linear" },
+        willChange: "transform",
+
+        // define background color using the custom property for HSL's hue
+        backgroundColor: css.hsl( this.hue, 90, 52),
     })
 
-    /*General styles for structure and controls */
+    // general styles for structure and controls
     container = css.$id({
         height: "100vh",
         overflow: "hidden",
         background: css.hsl( 220, 12, 16),
+        padding: 16
     })
 
     controls = css.$id({
         position: "absolute",
-        right: "1rem",
-        bottom: "50%",
-        transform: css.translateY( "50%"),
+        right: css.rem(1),
+        bottom: css.percent(50),
+        transform: css.translateY( css.percent(50)),
         display: "flex",
         flexDirection: "column",
     })
 
+    // using array so that we don't have to give names to rules whose names we don't use
     structure = [
         css.$media( "screen and (orientation: portrait)",
-            class extends css.StyleDefinition
+            class extends css.StyleDefinition<MyStyles>
             {
                 controls = css.$id({
-                    right: "50%",
+                    right: css.percent(50),
                     bottom: 0,
-                    transform: css.translateX("50%")
+                    transform: css.translateX( css.percent(50))
                 })
             }
         ),
 
         css.$style( "input", {
-            width: "12rem",
-            marginBottom: "1rem"
+            width: css.rem(12),
+            marginBottom: css.rem(1)
         }),
 
         css.$style( "label", {
             display: "flex",
             justifyContent: "space-between",
             color: "white",
-            fontSize: ".85rem",
+            fontSize: css.rem(0.85),
             fontFamily: "system-ui, -apple-system, sans-serif"
         })
     ]
@@ -114,7 +123,7 @@ class MyComponent extends mim.Component
 
     private onTranslateChanged( e: Event)
     {
-        styles.translate.setValue( (e.currentTarget as HTMLInputElement).value + "vw")
+        styles.translate.setValue( css.vw( parseFloat( (e.currentTarget as HTMLInputElement).value)))
     }
 
     private onScaleChanged( e: Event)
@@ -124,7 +133,7 @@ class MyComponent extends mim.Component
 
     private onDegChanged( e: Event)
     {
-        styles.rotate.setValue( (e.currentTarget as HTMLInputElement).value + "deg")
+        styles.rotate.setValue( css.deg( parseFloat( (e.currentTarget as HTMLInputElement).value)))
     }
 }
 

@@ -38,7 +38,7 @@ class SharedStyles extends css.StyleDefinition
 		display: "flex", flexDirection: "column",
 		"&>": [
 			["*", { flex: [0, 0, "auto"] }],
-			[this.elastic, { flex: "1 1 0", overflow: "auto" }],
+			[this.elastic, { flex: [1, 1, 0], overflow: "auto" }],
 		],
 		"&": [
 			[css.selector`&${this.spaced} > *`, { marginBlockStart: this.defaultBlockGap, marginBlockEnd: this.defaultBlockGap }],
@@ -48,7 +48,7 @@ class SharedStyles extends css.StyleDefinition
 		display: "flex", flexDirection: "row", alignItems: "center",
 		"&>": [
 			["*", { flex: [0, 0, "auto"] }],
-			[this.elastic, { flex: "1 1 0", overflow: "auto" }],
+			[this.elastic, { flex: [1, 1, 0], overflow: "auto" }],
 		],
 		"&": [
 			[css.selector`&${this.spaced} > *`, { marginInlineStart: this.defaultInlineGap, marginInlineEnd: this.defaultInlineGap }],

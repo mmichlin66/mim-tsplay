@@ -30,7 +30,7 @@ export class PlaygroundStyles extends css.StyleDefinition
     })
 
     panel = css.$class({
-        border: "2px inset",
+        border: [2, "inset"],
         placeSelf: "stretch",
         minWidth: 200,
     })
@@ -108,7 +108,7 @@ export class PlaygroundStyles extends css.StyleDefinition
     snippetCategory = css.$class({
         "+": sharedStyles.vbox,
         gap: 8,
-        width: "12em"
+        width: css.em(12)
     })
 
     snippetToSelect = css.$class({
