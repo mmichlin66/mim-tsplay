@@ -25,7 +25,7 @@ class MyStyles extends css.StyleDefinition
 		width: 200,
 		height: 200,
         backgroundImage: css.conicGradient( css.Colors.red, css.Colors.orange, css.Colors.yellow, css.Colors.green,
-            css.Colors.lightblue, css.Colors.blue, css.Colors.violet, css.Colors.red).from(45).at("70%")
+            css.Colors.lightblue, css.Colors.blue, css.Colors.violet, css.Colors.red).from(45).at(css.percent(70))
     })
 
     // helper class for layout

@@ -18,8 +18,8 @@ class MyStyles extends css.StyleDefinition
         margin: css.cm(0.5),
 
         // strings can also be used for numeric values - for developer convenience
-        width: "95%",
-        height: "3in",
+        width: css.percent(95),
+        height: css.inch(3),
 
         border: [1, "solid", "black"],
         overflow: "auto",
@@ -46,11 +46,11 @@ class MyStyles extends css.StyleDefinition
 
         // The Len.max() function accepts any number of parameters. Each parameter can be of any
         // type corresponding to the CSS `<length>` type.
-        width: css.Len.max( "80%", 300, css.inch(4)),
+        width: css.Len.max( css.percent(80), 300, css.inch(4)),
 
         // padding can be specified as an array of 2 to 3 elements:
         // 10px 1.4em 0.5cm 1%
-        padding: [10, 1.4, css.cm(0.5), "1%"],
+        padding: [10, 1.4, css.cm(0.5), css.percent(1)],
     })
 
     init = [

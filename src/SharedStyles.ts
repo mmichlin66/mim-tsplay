@@ -29,8 +29,8 @@ class SharedStyles extends css.StyleDefinition
 		css.$style( "h6", { "+": this.h, fontSize: 12 }),
 	]
 
-	defaultInlineGap = css.$var( "width", 8)
-	defaultBlockGap = css.$var( "width", 8)
+	defaultInlineGap = css.$var( "CssLength", 8)
+	defaultBlockGap = css.$var( "CssLength", 8)
 
 	spaced = css.$class();
 	elastic = css.$class();
