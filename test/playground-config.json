@@ -67,6 +67,11 @@
             "path": "examples/custom-props-animation.tsx",
             "description": "Demonstrates defining CSS properties and setting them dynamically."
         },
+        {
+            "name": "Media rules",
+            "path": "examples/media-rules.tsx",
+            "description": "Demonstrates responsve layout using media queries."
+        },
 
         { "name": "Advanced" },
         {
