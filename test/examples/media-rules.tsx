@@ -69,6 +69,7 @@ class MyStyles extends css.StyleDefinition
         float: "right"
     })
 
+    // the media feature-set defines the media type and width condition
     ifWide = css.$media( { $mediaType: "all", minWidth: 1001 },
         class extends css.StyleDefinition<MyStyles>
         {
@@ -83,14 +84,13 @@ class MyStyles extends css.StyleDefinition
         }
     )
 
-    // Uncomment the following line for newer syntax
-    // ifMedium = css.$media( { $mediaType: "all", width: [700, 1000] },
-    ifMedium = css.$media( { $mediaType: "all", minWidth: 700, maxWidth: 1000 },
+    // Specifying range as an array, whcih wil be translated to min-width and max-width features
+    ifMedium = css.$media( { $mediaType: "all", width: [700, 1000] },
         class extends css.StyleDefinition<MyStyles>
         {
             sidebarRules = [
                 css.$style( css.selector`${this.$parent.sidebar} ul li a:before`, {
-                    content: "Email: ",
+                    content: "\"Email: \"",
                     fontStyle: "italic",
                     color: 0x666666
                 })
@@ -98,8 +98,9 @@ class MyStyles extends css.StyleDefinition
         }
     )
 
+    // multiple feature-sets are combined with "or"
     ifNarrowOrVeryWide = css.$media( [
-            { $mediaType: "all", minWidth: 520, maxWidth: 1000 },
+            { $mediaType: "all", width: [520, 699] },
             { minWidth: 1151 }
         ],
         class extends css.StyleDefinition<MyStyles>
