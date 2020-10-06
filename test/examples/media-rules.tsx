@@ -7,7 +7,7 @@ import * as css from "mimcss"
 
 class MyStyles extends css.StyleDefinition
 {
-    elementRuls = [
+    elementRules = [
         css.$style( "*", {
             margin: 0,
             padding: 0 }
