@@ -28,6 +28,19 @@ class MyStyles extends css.StyleDefinition
             css.Colors.lightblue, css.Colors.blue, css.Colors.violet, css.Colors.red).from(45).at(css.percent(70))
     })
 
+    // another example of conic gradient
+	checkerboard = css.$class({
+		width: 200,
+		height: 200,
+		background: {
+            image: css.conicGradient( ["white", 0.25], ["black", 0.25, 0.5], ["white", 0.5, 0.75], ["black", 0.75]),
+            position: ["top", "left"],
+            size: [css.percent(25), css.percent(25)],
+            repeat: "repeat"
+		},
+		border: [1, "solid"]
+    })
+
     // helper class for layout
 	hbox = css.$class({
         display: "flex",
@@ -51,6 +64,7 @@ class MyComponent extends mim.Component
 				<div class={styles.linearGradient} />
 				<div class={styles.radialGradient} />
 				<div class={styles.conic} />
+				<div class={styles.checkerboard} />
 			</div>
 		</div>
 	}

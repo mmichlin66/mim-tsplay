@@ -91,9 +91,11 @@ class Playground extends mim.Component
             jsx: ts.JsxEmit.React,
             jsxFactory: "mim.jsx",
         })
+
+        this.callMeAfterUpdate( this.postMountInit);
     }
 
-    public async didMount()
+    private async postMountInit()
     {
         let progress = new mim.ProgressBox( "Loading playground configuration...", "Please wait");
         progress.showModal();
@@ -160,6 +162,7 @@ class Playground extends mim.Component
         }
     }
 
+    @mim.watcher
     public render(): any
 	{
         return <div class={playgroundStyles.masterGrid}>
@@ -249,6 +252,7 @@ class Playground extends mim.Component
         </div>
     }
 
+    @mim.watcher
     private renderRightPane(): any
 	{
         let content: any;
