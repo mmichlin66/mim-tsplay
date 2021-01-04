@@ -20,6 +20,7 @@
 		"outDir": "./lib/",
 		"jsx": "react",
 		"jsxFactory": "mim.jsx",
+		"jsxFragmentFactory": "mim.Fragment",
 	},
 
 	"include": [

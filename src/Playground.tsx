@@ -193,12 +193,12 @@ class Playground extends mim.Component
 
     private renderExampleList(): any
 	{
-        return <mim.Fragment>
+        return <>
             <span>Examples:</span>
             <select change={this.onExampleSelected}>
                 {this.exampleList && this.exampleList.length > 0 && this.renderExampleOptions()}
             </select>
-        </mim.Fragment>
+        </>
     }
 
     private renderExampleOptions(): any[]
@@ -286,21 +286,21 @@ class Playground extends mim.Component
 
     private renderCompilationError( e: ICompilationErrorInfo): any
 	{
-        return <mim.Fragment>
+        return <>
             <span>{`TS${e.code}`}</span>
             <span>at</span>
             <span click={() => this.gotoPosition( e.row, e.col, e.length)} style={{cursor: "pointer", color: "blue"}}>
                 {`${e.row},${e.col}`}
             </span>
             <span>{e.message}</span>
-        </mim.Fragment>
+        </>
     }
 
     private renderOtherError( e: Error): any
 	{
-        return <mim.Fragment>
+        return <>
             <span>{e.message}</span>
-        </mim.Fragment>
+        </>
     }
 
 

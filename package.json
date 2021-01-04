@@ -25,21 +25,21 @@
     ],
     "license": "MIT",
     "devDependencies": {
-        "copy-webpack-plugin": "^6.0.3",
-        "css-loader": "^4.1.1",
-        "file-loader": "^6.0.0",
+        "copy-webpack-plugin": "^7.0.0",
+        "css-loader": "^5.0.1",
+        "file-loader": "^6.2.0",
         "ifdef-loader": "^2.1.5",
-        "monaco-editor-webpack-plugin": "^1.9.0",
-        "source-map-loader": "^0.2.4",
-        "style-loader": "^1.2.1",
-        "typescript": "^3.9.7",
-        "webpack": "^4.44.0",
-        "webpack-cli": "^3.3.12"
+        "monaco-editor-webpack-plugin": "^2.1.0",
+        "source-map-loader": "^2.0.0",
+        "style-loader": "^2.0.0",
+        "typescript": "^4.1.3",
+        "webpack": "^5.11.1",
+        "webpack-cli": "^4.3.1"
     },
     "dependencies": {
         "mimbl": "^0.5.3",
         "mimcss": "^0.8.3",
-        "monaco-editor": "^0.20.0"
+        "monaco-editor": "^0.21.2"
     },
     "files": [
         "lib/mim-tsplay.js",
