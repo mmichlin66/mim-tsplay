@@ -162,7 +162,6 @@ class Playground extends mim.Component
         }
     }
 
-    @mim.watcher
     public render(): any
 	{
         return <div class={playgroundStyles.masterGrid}>
@@ -252,7 +251,6 @@ class Playground extends mim.Component
         </div>
     }
 
-    @mim.watcher
     private renderRightPane(): any
 	{
         let content: any;
