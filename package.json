@@ -37,8 +37,9 @@
         "webpack-cli": "^4.3.1"
     },
     "dependencies": {
-        "mimbl": "^0.6.2",
         "mimcss": "^0.8.6",
+        "mimbl": "^0.6.2",
+        "mimcl": "^0.6.2",
         "monaco-editor": "^0.21.2"
     },
     "files": [

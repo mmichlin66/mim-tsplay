@@ -1,15 +1,15 @@
-import * as mim from "mimbl";
-import * as css from "mimcss"
-import {sharedStyles} from "./SharedStyles";
-import {playgroundStyles} from "./PlaygroundStyles";
-import {ICodeSnippetInfo, ITemplateCodeSnippetInfo, ITemplateCodeSnippetParamInfo} from "./PlaygroundConfig";
+import * as mim from "mimbl"
+import * as comp from "mimcl"
+import {sharedStyles} from "./SharedStyles"
+import {playgroundStyles} from "./PlaygroundStyles"
+import {ICodeSnippetInfo, ITemplateCodeSnippetInfo, ITemplateCodeSnippetParamInfo} from "./PlaygroundConfig"
 
 
 
 /**
  * A dialog that allows the user to choose a code snippet to be inserted.
  */
-export class CodeSnippetChooser extends mim.Dialog
+export class CodeSnippetChooser extends comp.Dialog
 {
     constructor( codeSnippetMap: Map<string,ICodeSnippetInfo[]>)
     {
@@ -56,7 +56,7 @@ export class CodeSnippetChooser extends mim.Dialog
 /**
  * A dialog that allows the user to provide values for code snippet parameters.
  */
-export class CodeSnippetParams extends mim.Dialog
+export class CodeSnippetParams extends comp.Dialog
 {
     constructor( snippet: ITemplateCodeSnippetInfo)
     {
@@ -105,8 +105,8 @@ export class CodeSnippetParams extends mim.Dialog
 
         if (elmsWithErrors.length > 0)
         {
-            await mim.MsgBox.showModal( "Please provide values for required parameters", "Parameters",
-                mim.MsgBoxButtonBar.OK, mim.MsgBoxIcon.Warning);
+            await comp.MsgBox.showModal( "Please provide values for required parameters", "Parameters",
+                comp.MsgBoxButtonBar.OK, comp.MsgBoxIcon.Warning);
             return;
         }
 

@@ -31,8 +31,7 @@
                 "api/UtilAPI.d.ts",
                 "api/HtmlTypes.d.ts",
                 "api/SvgTypes.d.ts",
-                "api/mim.d.ts",
-                "comp/Popups.d.ts"
+                "api/mim.d.ts"
             ],
             "rootPath": "mimbl/"
         }

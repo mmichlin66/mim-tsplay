@@ -1,5 +1,5 @@
 ﻿import * as mim from "mimbl";
-import * as css from "mimcss"
+import * as comp from "mimcl"
 import * as monaco from "monaco-editor";
 import {sharedStyles} from "./SharedStyles";
 import {playgroundStyles} from "./PlaygroundStyles";
@@ -97,7 +97,7 @@ class Playground extends mim.Component
 
     private async postMountInit()
     {
-        let progress = new mim.ProgressBox( "Loading playground configuration...", "Please wait");
+        let progress = new comp.ProgressBox( "Loading playground configuration...", "Please wait");
         progress.showModal();
 
         // load and parse configuration file
@@ -336,7 +336,7 @@ class Playground extends mim.Component
         // first clear the right panel
         this.clearRighPaneData();
 
-        let progress = new mim.ProgressBox( undefined, "Please wait");
+        let progress = new comp.ProgressBox( undefined, "Please wait");
         progress.showModalWithDelay( 750);
 
         try
@@ -367,8 +367,8 @@ class Playground extends mim.Component
     {
         if (this.codeSnippetMap.size === 0)
         {
-            await mim.MsgBox.showModal( "No code snippets defined in playground configuration",
-                    "Playground", mim.MsgBoxButtonBar.OK, mim.MsgBoxIcon.Info);
+            await comp.MsgBox.showModal( "No code snippets defined in playground configuration",
+                    "Playground", comp.MsgBoxButtonBar.OK, comp.MsgBoxIcon.Info);
             return;
         }
 
@@ -432,7 +432,7 @@ class Playground extends mim.Component
      * Loads and parses playground configuration. Returns array of errors. Empty error indicates
      * full success.
      */
-    private async loadConfig( progress: mim.ProgressBox): Promise<Error[]>
+    private async loadConfig( progress: comp.ProgressBox): Promise<Error[]>
     {
         // parse the configuration and accumulate errors
         let errors: Error[] = [];
@@ -461,7 +461,7 @@ class Playground extends mim.Component
     /**
      * Adds extra libraries to the editor.
      */
-    private async loadExtension( extClass: IPlaygroundExtensionClass, errors: Error[], progress: mim.ProgressBox): Promise<void>
+    private async loadExtension( extClass: IPlaygroundExtensionClass, errors: Error[], progress: comp.ProgressBox): Promise<void>
     {
         progress.setContent( `Loading playground extension '${extClass.displayName}'...`);
 
@@ -481,7 +481,7 @@ class Playground extends mim.Component
     /**
      * Adds extra libraries to the editor.
      */
-    private async addExtraLibs( extraLibs: IExtraLibInfo[], errors: Error[], progress: mim.ProgressBox): Promise<void>
+    private async addExtraLibs( extraLibs: IExtraLibInfo[], errors: Error[], progress: comp.ProgressBox): Promise<void>
     {
         // parse extra libraries
         if (!extraLibs || extraLibs.length === 0)
@@ -524,7 +524,7 @@ class Playground extends mim.Component
     /**
      * Adds examples.
      */
-    private async addExamples( examples: IExampleInfo[], errors: Error[], progress: mim.ProgressBox): Promise<void>
+    private async addExamples( examples: IExampleInfo[], errors: Error[], progress: comp.ProgressBox): Promise<void>
     {
         // parse examples
         if (!examples || examples.length === 0)
@@ -542,7 +542,7 @@ class Playground extends mim.Component
     /**
      * Adds code snippets.
      */
-    private async addCodeSnippets( snippets: ICodeSnippetInfo[], errors: Error[], progress: mim.ProgressBox): Promise<void>
+    private async addCodeSnippets( snippets: ICodeSnippetInfo[], errors: Error[], progress: comp.ProgressBox): Promise<void>
     {
         if (!snippets || snippets.length === 0)
             return;
@@ -584,7 +584,7 @@ class Playground extends mim.Component
             try
             {
                 let promise = this.loadOrSelectFile( path);
-                mim.ProgressBox.showUntil( promise, `Loading file '${path}'...`, "Please wait");
+                comp.ProgressBox.showUntil( promise, `Loading file '${path}'...`, "Please wait");
                 await promise;
                 this.currentFileInfo = fileInfo;
             }

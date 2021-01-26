@@ -58,7 +58,8 @@ function config( isDev)
                     { from: "node_modules/mimbl/lib/api/HtmlTypes.d.ts", to: "mimbl/api/" },
                     { from: "node_modules/mimbl/lib/api/SvgTypes.d.ts", to: "mimbl/api/" },
                     { from: "node_modules/mimbl/lib/api/mim.d.ts", to: "mimbl/api/" },
-                    { from: "node_modules/mimbl/lib/comp/Popups.d.ts", to: "mimbl/comp/" },
+
+                    { from: "node_modules/mimcl/lib/mimcl" + jsSuffix },
 
                     { from: "test/require.js" },
                     { from: "test/playground-config.json" },
@@ -73,6 +74,8 @@ function config( isDev)
         {
             mimcss: { root: 'mimcss', commonjs2: 'mimcss', commonjs: 'mimcss', amd: 'mimcss' },
             mimbl: { root: 'mimbl', commonjs2: 'mimbl', commonjs: 'mimbl', amd: 'mimbl' },
+            mimurl: { root: 'mimurl', commonjs2: 'mimurl', commonjs: 'mimurl', amd: 'mimurl' },
+            mimcl: { root: 'mimcl', commonjs2: 'mimcl', commonjs: 'mimcl', amd: 'mimcl' },
         }
     }
 }

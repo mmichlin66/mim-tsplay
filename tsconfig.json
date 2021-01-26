@@ -1,7 +1,8 @@
 {
 	"references": [
 		{ "path": "../mimcss" },
-		{ "path": "../mimbl" }
+		{ "path": "../mimbl" },
+		{ "path": "../mimcl" },
 	],
 	"compilerOptions": {
         "composite": true,
