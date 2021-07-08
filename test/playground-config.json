@@ -20,6 +20,8 @@
                 "api/MediaAPI.d.ts",
                 "api/RuleTypes.d.ts",
                 "api/RuleAPI.d.ts",
+                "api/SchedulingTypes.d.ts",
+                "api/SchedulingAPI.d.ts",
                 "api/StyleTypes.d.ts",
                 "api/StyleAPI.d.ts"
             ],
