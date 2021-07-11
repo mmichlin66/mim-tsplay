@@ -52,11 +52,11 @@ class MyStyles extends css.StyleDefinition
     })
 
     sidebarRules = [
-        css.$style( [this.sidebar, " ul"], {
+        css.$style( [this.sidebar, css.raw` ul`], {
             listStyle: "none"
         }),
 
-        css.$style( [this.sidebar, " ul li a"], {
+        css.$style( css.selector`${this.sidebar} ul li a`, {
             color: 0x990000,
             textDecoration: "none",
             padding: [3, 0],
