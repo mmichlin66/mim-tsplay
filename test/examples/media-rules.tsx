@@ -8,32 +8,32 @@ import * as css from "mimcss"
 class MyStyles extends css.StyleDefinition
 {
     elementRules = [
-        css.$style( "*", {
+        css.$tag( "*", {
             margin: 0,
             padding: 0 }
         ),
 
-        css.$style( "body", {
+        css.$tag( "body", {
             fontSize: 14,
             fontFamily: "Georgia, serif",
             background: 0xcccccc
         }),
 
-        css.$style( "article, aside, figure, footer, header, hgroup, menu, nav, section", {
+        css.$tag( ["article", "aside", "figure", "footer", "header", "hgroup", "menu", "nav", "section"], {
             display: "block"
         }),
 
-        css.$style( "h2", {
+        css.$tag( "h2", {
             fontSize: 24,
             fontFamily: "Georgia",
             margin: [0, 0, 10, 0]
         }),
 
-        css.$style( "h3", {
+        css.$tag( "h3", {
             margin: [0, 0, 8, 0]
         }),
 
-        css.$style( "p", {
+        css.$tag( "p", {
             margin: [0, 0, 20, 0]
         }),
     ]
@@ -56,7 +56,7 @@ class MyStyles extends css.StyleDefinition
             listStyle: "none"
         }),
 
-        css.$style( css.selector`${this.sidebar} ul li a`, {
+        css.$style( [this.sidebar, " ul li a"], {
             color: 0x990000,
             textDecoration: "none",
             padding: [3, 0],
@@ -109,7 +109,7 @@ class MyStyles extends css.StyleDefinition
                 css.$style( css.selector`${this.$parent.sidebar} ul li a`, {
                     paddingLeft: 21,
                     background: {
-                        image: css.url("email.png"),
+                        image: css.url("../test/examples/email.png"),
                         position: ["left", "center"],
                         repeat: "no-repeat"
                     }
