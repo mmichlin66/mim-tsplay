@@ -70,7 +70,7 @@ class MyStyles extends css.StyleDefinition
     })
 
     // the media feature-set defines the media type and width condition
-    ifWide = css.$media( { $mediaType: "all", minWidth: 1001 },
+    ifWide = css.$media( { minWidth: 1001 },
         class extends css.StyleDefinition<MyStyles>
         {
             sidebarRules = [
@@ -84,8 +84,8 @@ class MyStyles extends css.StyleDefinition
         }
     )
 
-    // Specifying range as an array, whcih wil be translated to min-width and max-width features
-    ifMedium = css.$media( { $mediaType: "all", width: [700, 1000] },
+    // Specifying range as an array, which wil be translated to min-width and max-width features
+    ifMedium = css.$media( { width: [700, 1000] },
         class extends css.StyleDefinition<MyStyles>
         {
             sidebarRules = [
@@ -100,7 +100,7 @@ class MyStyles extends css.StyleDefinition
 
     // multiple feature-sets are combined with "or"
     ifNarrowOrVeryWide = css.$media( [
-            { $mediaType: "all", width: [520, 699] },
+            { width: [520, 699] },
             { minWidth: 1151 }
         ],
         class extends css.StyleDefinition<MyStyles>
