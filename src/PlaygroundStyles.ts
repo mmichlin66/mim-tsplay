@@ -5,14 +5,14 @@ import {sharedStyles} from "./SharedStyles";
 
 export class PlaygroundStyles extends css.StyleDefinition
 {
-    editorToolbarArea = css.$gridarea();
-    editorContentArea = css.$gridarea();
-    htmlToolbarArea = css.$gridarea();
-    htmlContentArea = css.$gridarea();
-    statusbarArea = css.$gridarea();
-    splitterArea = css.$gridarea();
+    editorToolbarArea = this.$gridarea();
+    editorContentArea = this.$gridarea();
+    htmlToolbarArea = this.$gridarea();
+    htmlContentArea = this.$gridarea();
+    statusbarArea = this.$gridarea();
+    splitterArea = this.$gridarea();
 
-    masterGrid = css.$class({
+    masterGrid = this.$class({
         width: "100%",
         height: "100%",
         overflow: "hidden",
@@ -29,56 +29,56 @@ export class PlaygroundStyles extends css.StyleDefinition
         ]
     })
 
-    panel = css.$class({
+    panel = this.$class({
         border: [2, "inset"],
         placeSelf: "stretch",
         minWidth: 200,
     })
 
-    leftPane = css.$class({
+    leftPane = this.$class({
         "+": this.panel,
         gridArea: this.editorContentArea,
     })
 
-    rightPane = css.$class({
+    rightPane = this.$class({
         "+": this.panel,
         gridArea: this.htmlContentArea,
     })
 
-    toolbar = css.$class({
+    toolbar = this.$class({
         backgroundColor: "lightgrey",
         padding: [4, 0],
     })
 
-    editorToolbar = css.$class({
+    editorToolbar = this.$class({
         "+": this.toolbar,
         gridArea: this.editorToolbarArea,
     })
 
-    htmlToolbar = css.$class({
+    htmlToolbar = this.$class({
         "+": this.toolbar,
         gridArea: this.htmlToolbarArea,
     })
 
-    statusbar = css.$class({
+    statusbar = this.$class({
         padding: 4,
         backgroundColor: "lightgrey",
         gridArea: this.statusbarArea,
     })
 
-    splitter = css.$class({
+    splitter = this.$class({
         width: 8,
         backgroundColor: "lightgrey",
         gridArea: this.splitterArea,
     })
 
-    iframe = css.$class({
+    iframe = this.$class({
         width: "100%",
         height: "100%",
         border: "none"
     })
 
-    compilationErrorsGrid = css.$class({
+    compilationErrorsGrid = this.$class({
         padding: 4,
         display: "grid",
         gap: [8,12],
@@ -86,42 +86,42 @@ export class PlaygroundStyles extends css.StyleDefinition
         gridAutoRows: "auto"
     })
 
-    padding4 = css.$class({
+    padding4 = this.$class({
         padding: 4,
     })
 
-    otherErrorsList = css.$classname( sharedStyles.spacedVBox, this.padding4);
+    otherErrorsList = this.$classname( sharedStyles.spacedVBox, this.padding4);
 
-    errorsTitle = css.$class({
+    errorsTitle = this.$class({
         gridColumn: css.span(4),
         padding: [4,0],
         fontWeight: "bold"
     })
 
-    snippetPanel = css.$class({
+    snippetPanel = this.$class({
         "+": sharedStyles.hbox,
         alignItems: "flex-start",
         padding: 8,
         overflow: "auto"
     })
 
-    snippetCategory = css.$class({
+    snippetCategory = this.$class({
         "+": sharedStyles.vbox,
         gap: 8,
         width: css.em(12)
     })
 
-    snippetToSelect = css.$class({
+    snippetToSelect = this.$class({
         "+": sharedStyles.vbox,
         marginLeft: 16,
     })
 
-    codeSnippetParamPanel = css.$class({
+    codeSnippetParamPanel = this.$class({
         alignItems: "stretch",
         padding: 8
     })
 
-    codeSnippetParams = css.$classname( sharedStyles.spacedVBox, this.codeSnippetParamPanel);
+    codeSnippetParams = this.$classname( sharedStyles.spacedVBox, this.codeSnippetParamPanel);
 
 }
 

@@ -5,7 +5,7 @@ import * as css from "mimcss"
 class MyStyles extends css.StyleDefinition
 {
     // example of linear gradient
-	linearGradient = css.$class({
+	linearGradient = this.$class({
 		width: 200,
 		height: 200,
         backgroundImage: css.linearGradient( css.Colors.pink,
@@ -13,7 +13,7 @@ class MyStyles extends css.StyleDefinition
 	})
 
     // example of radial gradient
-	radialGradient = css.$class({
+	radialGradient = this.$class({
 		width: 200,
 		height: 200,
 		backgroundImage: css.radialGradient( css.Colors.lightcyan, css.Colors.orange, [30],
@@ -21,7 +21,7 @@ class MyStyles extends css.StyleDefinition
 	})
 
     // example of conic gradient
-	conic = css.$class({
+	conic = this.$class({
 		width: 200,
 		height: 200,
         backgroundImage: css.conicGradient( css.Colors.red, css.Colors.orange, css.Colors.yellow, css.Colors.green,
@@ -29,7 +29,7 @@ class MyStyles extends css.StyleDefinition
     })
 
     // another example of conic gradient
-	checkerboard = css.$class({
+	checkerboard = this.$class({
 		width: 200,
 		height: 200,
 		background: {
@@ -42,7 +42,7 @@ class MyStyles extends css.StyleDefinition
     })
 
     // helper class for layout
-	hbox = css.$class({
+	hbox = this.$class({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",

@@ -8,37 +8,37 @@ import * as css from "mimcss"
 class MyStyles extends css.StyleDefinition
 {
     elementRules = [
-        css.$tag( "*", {
+        this.$tag( "*", {
             margin: 0,
             padding: 0 }
         ),
 
-        css.$tag( "body", {
+        this.$tag( "body", {
             fontSize: 14,
             fontFamily: "Georgia, serif",
             background: 0xcccccc
         }),
 
-        css.$tag( ["article", "aside", "figure", "footer", "header", "hgroup", "menu", "nav", "section"], {
+        this.$tag( ["article", "aside", "figure", "footer", "header", "hgroup", "menu", "nav", "section"], {
             display: "block"
         }),
 
-        css.$tag( "h2", {
+        this.$tag( "h2", {
             fontSize: 24,
             fontFamily: "Georgia",
             margin: [0, 0, 10, 0]
         }),
 
-        css.$tag( "h3", {
+        this.$tag( "h3", {
             margin: [0, 0, 8, 0]
         }),
 
-        css.$tag( "p", {
+        this.$tag( "p", {
             margin: [0, 0, 20, 0]
         }),
     ]
 
-    fluidWrap = css.$id({
+    fluidWrap = this.$id({
         width: "70%",
         margin: [60, "auto"],
         padding: 20,
@@ -46,17 +46,17 @@ class MyStyles extends css.StyleDefinition
         overflow: "hidden"
     })
 
-    sidebar = css.$id({
+    sidebar = this.$id({
         width: "35%",
         float: "left"
     })
 
     sidebarRules = [
-        css.$style( [this.sidebar, css.raw` ul`], {
+        this.$style( [this.sidebar, css.raw` ul`], {
             listStyle: "none"
         }),
 
-        css.$style( [this.sidebar, " ul li a"], {
+        this.$style( [this.sidebar, " ul li a"], {
             color: 0x990000,
             textDecoration: "none",
             padding: [3, 0],
@@ -64,17 +64,17 @@ class MyStyles extends css.StyleDefinition
         })
     ]
 
-    mainContent = css.$id({
+    mainContent = this.$id({
         width: "65%",
         float: "right"
     })
 
     // the media feature-set defines the media type and width condition
-    ifWide = css.$media( { minWidth: 1001 },
+    ifWide = this.$media( { minWidth: 1001 },
         class extends css.StyleDefinition<MyStyles>
         {
             sidebarRules = [
-                css.$style( css.selector`${this.$parent.sidebar} ul li a:after`, {
+                this.$style( css.selector`${this.$parent.sidebar} ul li a:after`, {
                     content: css.raw`" (" ${css.attr("data-email")} ")"`,
                     fontSize: 11,
                     fontStyle: "italic",
@@ -85,11 +85,11 @@ class MyStyles extends css.StyleDefinition
     )
 
     // Specifying range as an array, which wil be translated to min-width and max-width features
-    ifMedium = css.$media( { width: [700, 1000] },
+    ifMedium = this.$media( { width: [700, 1000] },
         class extends css.StyleDefinition<MyStyles>
         {
             sidebarRules = [
-                css.$style( css.selector`${this.$parent.sidebar} ul li a:before`, {
+                this.$style( css.selector`${this.$parent.sidebar} ul li a:before`, {
                     content: "\"Email: \"",
                     fontStyle: "italic",
                     color: 0x666666
@@ -99,14 +99,14 @@ class MyStyles extends css.StyleDefinition
     )
 
     // multiple feature-sets are combined with "or"
-    ifNarrowOrVeryWide = css.$media( [
+    ifNarrowOrVeryWide = this.$media( [
             { width: [520, 699] },
             { minWidth: 1151 }
         ],
         class extends css.StyleDefinition<MyStyles>
         {
             sidebarRules = [
-                css.$style( css.selector`${this.$parent.sidebar} ul li a`, {
+                this.$style( css.selector`${this.$parent.sidebar} ul li a`, {
                     paddingLeft: 21,
                     background: {
                         image: css.url("../test/examples/email.png"),

@@ -5,7 +5,7 @@ import * as css from "mimcss"
 // Define styles for our component
 class MyStyles extends css.StyleDefinition
 {
-    cls1 = css.$class({
+    cls1 = this.$class({
     })
 }
 

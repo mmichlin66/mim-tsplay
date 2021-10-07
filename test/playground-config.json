@@ -98,7 +98,7 @@
             "category": "Style Rules",
             "name": "Class Rule",
             "description": "Defines styleset for CSS class",
-            "template": "{name} = css.$class({\n})\n",
+            "template": "{name} = this.$class({\n})\n",
             "params": [
                 {
                     "id": "name",
@@ -112,7 +112,7 @@
             "category": "Style Rules",
             "name": "ID Rule",
             "description": "Defines styleset for element ID",
-            "template": "{name} = css.$id({\n})\n",
+            "template": "{name} = this.$id({\n})\n",
             "params": [
                 {
                     "id": "name",
@@ -126,7 +126,7 @@
             "category": "Style Rules",
             "name": "Generic Rule",
             "description": "Defines styleset for arbitrary CSS selector",
-            "template": "{name} = css.$style( \"{selector}\", {\n})\n",
+            "template": "{name} = this.$style( \"{selector}\", {\n})\n",
             "params": [
                 {
                     "id": "name",
@@ -147,7 +147,7 @@
             "category": "Conditional Rules",
             "name": "Media Rule",
             "description": "Defines conditional media rule",
-            "template": "{name} = css.$media( {},\n\tclass extends css.StyleDefinition\n\t{\n\t}\n)\n",
+            "template": "{name} = this.$media( {},\n\tclass extends css.StyleDefinition\n\t{\n\t}\n)\n",
             "params": [
                 {
                     "id": "name",

@@ -12,15 +12,15 @@ import * as css from "mimcss"
 class MyStyles extends css.StyleDefinition
 {
     // define custom properties whose values will be changed by user actions
-    translate = css.$var( "CssLength", 0)
-    scale = css.$var( "CssNumber", 1)
-    rotate = css.$var( "CssAngle", 0)
+    translate = this.$var( "CssLength", 0)
+    scale = this.$var( "CssNumber", 1)
+    rotate = this.$var( "CssAngle", 0)
 
     // define custom properties which will be defined differently under different elements
-    hue = css.$var( "CssAngle")
-    duration = css.$var( "CssTime")
+    hue = this.$var( "CssAngle")
+    duration = this.$var( "CssTime")
 
-    mover = css.$class({
+    mover = this.$class({
         // define propeties common for all "movers"
         width: css.vmin(15),
         height: css.vmin(15),
@@ -50,14 +50,14 @@ class MyStyles extends css.StyleDefinition
     })
 
     // general styles for structure and controls
-    container = css.$id({
+    container = this.$id({
         height: "100vh",
         overflow: "hidden",
         background: css.hsl( 220, 12, 16),
         padding: 16
     })
 
-    controls = css.$id({
+    controls = this.$id({
         position: "absolute",
         right: css.rem(1),
         bottom: css.percent(50),
@@ -68,10 +68,10 @@ class MyStyles extends css.StyleDefinition
 
     // using array so that we don't have to give names to rules whose names we don't use
     structure = [
-        css.$media( "screen and (orientation: portrait)",
+        this.$media( "screen and (orientation: portrait)",
             class extends css.StyleDefinition<MyStyles>
             {
-                controls = css.$id({
+                controls = this.$id({
                     right: css.percent(50),
                     bottom: 0,
                     transform: css.translateX( css.percent(50))
@@ -79,12 +79,12 @@ class MyStyles extends css.StyleDefinition
             }
         ),
 
-        css.$style( "input", {
+        this.$style( "input", {
             width: css.rem(12),
             marginBottom: css.rem(1)
         }),
 
-        css.$style( "label", {
+        this.$style( "label", {
             display: "flex",
             justifyContent: "space-between",
             color: "white",

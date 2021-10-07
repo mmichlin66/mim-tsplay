@@ -6,7 +6,7 @@ import * as css from "mimcss"
 // Define styles for our component
 class MyStyles extends css.StyleDefinition
 {
-    hello = css.$class({
+    hello = this.$class({
         // 40px - "px" is the default unit for integer length values
         fontSize: 40,
 

@@ -6,7 +6,7 @@ import * as css from "mimcss"
 // Define styles for our component
 class MyStyles extends css.StyleDefinition
 {
-    outerBox = css.$class({
+    outerBox = this.$class({
         // values of CSS <length> type use "px" for integer numbers and "em" for floating point numbers
         fontSize: 24,
         padding: 1.5,
@@ -25,7 +25,7 @@ class MyStyles extends css.StyleDefinition
         overflow: "auto",
     })
 
-    orangeBox = css.$class({
+    orangeBox = this.$class({
         border: [3, "solid", "red"],
         backgroundColor: "orange",
 
@@ -39,7 +39,7 @@ class MyStyles extends css.StyleDefinition
         width: css.Len.calc`100% - ${200}`,
     })
 
-    blueBox = css.$class({
+    blueBox = this.$class({
         border: [3, "solid", "blue"],
         backgroundColor: "cyan",
         marginTop: 20,
@@ -54,9 +54,9 @@ class MyStyles extends css.StyleDefinition
     })
 
     init = [
-        css.$style( "*", { boxSizing: "border-box"}),
-        css.$style( "html", {height: "100%"}),
-        css.$style( "body", {height: "100%", margin: 0}),
+        this.$style( "*", { boxSizing: "border-box"}),
+        this.$style( "html", {height: "100%"}),
+        this.$style( "body", {height: "100%", margin: 0}),
     ]
 }
 

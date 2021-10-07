@@ -14,22 +14,22 @@ abstract class Theme extends css.StyleDefinition
     // definition classes. These rules define the names that will be used when rendering HTML.
     // We don't have to use the abstract keyword, but doing this forces the derived classes to
     // provide definitions for these rueles (otherwise, theTypeScript compiler will not be happy).
-	abstract box = css.$class()
-	abstract button = css.$class()
-    abstract input = css.$class()
+	abstract box = this.$class()
+	abstract button = this.$class()
+    abstract input = this.$class()
 
     // define several custom CSS properties that are used by rules of this class. We don't provide
     // values for these variables but we specify the CSS property name (in camel form) that
     // define the types of these variables. The @virtual decorator is necessary here because
     // although these variables are used by the rules in this base class, we want the values to
     // be those assigned in the derived classes.
-    @css.virtual fontFamily = css.$var( "fontFamily")
-    @css.virtual fontStyle = css.$var( "fontStyle")
-    @css.virtual fontSize = css.$var( "fontSize")
-    @css.virtual borderColor = css.$var( "color")
-    @css.virtual boxBgColor = css.$var( "color")
-   
-    grid = css.$class({
+    @css.virtual fontFamily = this.$var( "fontFamily")
+    @css.virtual fontStyle = this.$var( "fontStyle")
+    @css.virtual fontSize = this.$var( "fontSize")
+    @css.virtual borderColor = this.$var( "color")
+    @css.virtual boxBgColor = this.$var( "color")
+
+    grid = this.$class({
         display: "grid",
         gridTemplateColumns: css.repeat(2, "1fr"),
         gridTemplateRows: css.repeat(2, "1fr"),
@@ -43,7 +43,7 @@ abstract class Theme extends css.StyleDefinition
     // use $abstract rule because the following rules are only used as bases for the rules in the
     // derived style definition classes. Using the $abstract rule means that we wil not create
     // actual CSS SOM objects for them.
-    boxBase = css.$abstract({
+    boxBase = this.$abstract({
         display: "flex",
         padding: 24,
         border: [3, "solid", this.borderColor],
@@ -53,7 +53,7 @@ abstract class Theme extends css.StyleDefinition
         backgroundColor: this.boxBgColor
     })
 
-    buttonBase = css.$abstract({
+    buttonBase = this.$abstract({
         padding: 16,
         border: [3, "solid", this.borderColor],
         fontFamily: this.fontFamily,
@@ -63,7 +63,7 @@ abstract class Theme extends css.StyleDefinition
         ":hover": { opacity: 0.7 }
     })
 
-    inputBase = css.$abstract({
+    inputBase = this.$abstract({
         padding: 16,
         border: [3, "solid", this.borderColor],
         fontFamily: this.fontFamily,
@@ -72,7 +72,7 @@ abstract class Theme extends css.StyleDefinition
     })
 
     other = [
-        css.$style( 'button, input[type="text"]', {
+        this.$style( 'button, input[type="text"]', {
             fontFamily: this.fontFamily,
             fontSize: this.fontSize,
             ":focus": { outline: "none" }
@@ -88,24 +88,24 @@ class RoundTheme extends Theme
     // override values of custom CSS properties. Note that since these properties were defined
     // using the @virtual decorator in the base class, the values we provide here will be taken
     // by the rules defined in the base class.
-    fontFamily = css.$var( "fontFamily", "Verdana")
-    fontStyle = css.$var( "fontStyle", 45)
-    fontSize = css.$var( "fontSize", 24)
-    borderColor = css.$var( "color", "blue")
-    boxBgColor = css.$var( "color", "cyan")
+    fontFamily = this.$var( "fontFamily", "Verdana")
+    fontStyle = this.$var( "fontStyle", 45)
+    fontSize = this.$var( "fontSize", 24)
+    borderColor = this.$var( "color", "blue")
+    boxBgColor = this.$var( "color", "cyan")
 
     // override the rules that were declared in the base class.
-    box = css.$class({
+    box = this.$class({
         "+": this.boxBase,
         borderRadius: 16
     })
 
-    button = css.$class({
+    button = this.$class({
         "+": this.buttonBase,
         borderRadius: 16
     })
 
-    input = css.$class({
+    input = this.$class({
         "+": this.inputBase,
         borderRadius: 16,
     })
@@ -117,23 +117,23 @@ class RoundTheme extends Theme
 // the RoundTheme class - we just need to specify differen values for some properties.
 class SquareTheme extends Theme
 {
-    fontFamily = css.$var( "fontFamily", "monospace")
-    fontStyle = css.$var( "fontStyle", "normal")
-    fontSize = css.$var( "fontSize", 24)
-    borderColor = css.$var( "color", "red")
-    boxBgColor = css.$var( "color", "lightpink")
+    fontFamily = this.$var( "fontFamily", "monospace")
+    fontStyle = this.$var( "fontStyle", "normal")
+    fontSize = this.$var( "fontSize", 24)
+    borderColor = this.$var( "color", "red")
+    boxBgColor = this.$var( "color", "lightpink")
 
-    box = css.$class({
+    box = this.$class({
         "+": this.boxBase,
         borderStyle: "dotted"
     })
 
-    button = css.$class({
+    button = this.$class({
         "+": this.buttonBase,
         borderStyle: "dotted"
     })
 
-    input = css.$class({
+    input = this.$class({
         "+": this.inputBase,
         borderStyle: "dotted"
     })
@@ -182,7 +182,7 @@ export class Themes extends mim.Component
             </div>
        </div>
     }
-    
+
     private onRoundThemeClicked()
     {
         if (this.currentTheme !== "round")
@@ -192,7 +192,7 @@ export class Themes extends mim.Component
             this.theme = css.activate( RoundTheme);
         }
     }
-    
+
     private onSquareThemeClicked()
     {
         if (this.currentTheme !== "square")
