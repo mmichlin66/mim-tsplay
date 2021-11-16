@@ -67,10 +67,12 @@ let registeredExtensions = new Set<IPlaygroundExtensionClass>();
  */
 class Playground extends mim.Component
 {
-    constructor( configFilePath?: string)
+    constructor( configFilePath?: string, firstExample?: string, runFirstExample?: boolean)
     {
         super();
         this.configFilePath = configFilePath ? configFilePath : ConfigPath;
+        this.firstExample = firstExample;
+        this.runFirstExample = runFirstExample;
 
         this.exampleMap.set( ScratchPadFileInfo.path, ScratchPadFileInfo);
     }
@@ -120,11 +122,13 @@ class Playground extends mim.Component
             mouseWheelZoom: true,
         });
 
-        // display the first example if the configuration says so; otherwise, show empty file
-        if (this.config.firstExample)
+        // display the first example if the file path was passed in the constuctor or if the
+        // configuration says so; otherwise, show empty file
+        let firstExample = this.firstExample ?? this.config.firstExample;
+        if (firstExample)
         {
             // open first example if the config indicates so
-            let fileInfo = this.exampleMap.get( this.config.firstExample);
+            let fileInfo = this.exampleMap.get( firstExample);
             if (fileInfo)
             {
                 try
@@ -740,6 +744,12 @@ class Playground extends mim.Component
     // Path to the playground configuration file
     private configFilePath: string;
 
+    // Path to the first example to display
+    firstExample: string;
+
+    // Flag indicating whether the first example should be run immediately upon load
+    runFirstExample: boolean
+
     // Configuration information.
     private config: IPlaygroundConfig;
 
@@ -946,7 +956,8 @@ async function fetchFileJsonContent<T = any>( file: string, rootPath?: string): 
 
 
 // Create global function that can be called from HTML scripts to mount the Playground component
-(window as any).mountPlayground = function( anchor?: Node, configFilePath?: string)
+(window as any).mountPlayground = function( anchor?: Node, configFilePath?: string,
+    firstExample?: string, runFirstExample?: boolean)
 {
-    mim.mount( new Playground( configFilePath), anchor);
+    mim.mount( new Playground( configFilePath, firstExample, runFirstExample), anchor);
 }
