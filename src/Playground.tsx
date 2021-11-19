@@ -49,6 +49,13 @@ const ScratchPadFileInfo: IExampleInfo = {
     description: "Initially empty file that preserves your work"
 };
 
+// Information (placeholder) about a local file - it always exists in the list of examples
+const LocalFileInfo: IExampleInfo = {
+    name: "Local file",
+    path: "$$",
+    description: "Open local file, which you can edit and save"
+};
+
 
 
 /**
@@ -74,6 +81,7 @@ class Playground extends mim.Component
         this.firstExample = firstExample;
         this.runFirstExample = runFirstExample;
 
+        this.exampleMap.set( LocalFileInfo.path, LocalFileInfo);
         this.exampleMap.set( ScratchPadFileInfo.path, ScratchPadFileInfo);
     }
 
@@ -187,10 +195,13 @@ class Playground extends mim.Component
         return <div class={[playgroundStyles.editorToolbar, sharedStyles.spacedHBox]}>
             {this.renderExampleList()}
             <button id="run" click={this.onRunClicked} title="Compile code and display results">Run</button>
-            <button id="reload" click={this.onReloadClicked} title="Reload original example code">Reload</button>
+            <button id="reload" click={this.onReloadClicked} title="Reload original example code" disabled={this.isCurrentFileLocal}>Reload</button>
             <button id="insertCodeSnippet" click={this.onInsertCodeSnippetClicked} title="Choose a code snippet to insert into code">
                 Insert Code Snippet
             </button>
+            <input type="file" accept=".tsx,.ts" style={{ display: "none"}} ref={this.hiddenFileInputRef} change={this.onHiddenFileSelected} />
+            <button id="loadFile" click={this.onLoadFileClicked} title="Load local file">Load File</button>
+            <button id="saveFileAs" click={this.onSaveFileAsClicked} title="Save local file under a different name">Save As...</button>
         </div>
     }
 
@@ -314,11 +325,12 @@ class Playground extends mim.Component
             return;
 
         this.showExample( path);
+        this.isCurrentFileLocal = false;
     }
 
     private async onReloadClicked(): Promise<void>
     {
-        if (!this.currentFileInfo)
+        if (!this.currentFileInfo || this.isCurrentFileLocal)
             return;
 
         let path = this.currentFileInfo.path;
@@ -405,6 +417,134 @@ class Playground extends mim.Component
         let op = {identifier: { major: 1, minor: 1 }, range: range, text: codeToInsert, forceMoveMarkers: true};
         this.editor.executeEdits( "snippet", [op]);
     }
+
+    private async onLoadFileClicked(): Promise<void>
+    {
+        let showOpenFilePicker = (window as any).showOpenFilePicker;
+        if (showOpenFilePicker)
+        {
+            try
+            {
+                let [fileHandle] = await showOpenFilePicker({
+                    types: [{
+                        description: 'TypeScript Files',
+                        accept: { 'application/x-typescript': ['.tsx', '.ts'] }
+                    }],
+                    excludeAcceptAllOption: true,
+                    multiple: false
+                })
+
+                let file = await fileHandle.getFile();
+                await this.loadLocalFileContent( file);
+            }
+            catch(x)
+            {
+            }
+        }
+        else
+            this.hiddenFileInputRef?.click();
+    }
+
+    // This method is called when the "click" method is called on the hidden input element
+    private async onHiddenFileSelected(): Promise<void>
+    {
+        const inputElm = this.hiddenFileInputRef;
+        const file = !inputElm.files || inputElm.files.length === 0 ? null : inputElm.files.item(0);
+        if (file)
+            this.loadLocalFileContent( file);
+
+        this.hiddenFileInputRef.value = "";
+    }
+
+    private async loadLocalFileContent( file: File): Promise<void>
+    {
+        try
+        {
+            let content = await file.text()
+            let path = "localfile/" + file.name;
+            let info: IExampleInfo = { name: file.name, path };
+            this.currentFileInfo = info;
+            this.isCurrentFileLocal = true;
+
+            let model = this.files.get( path);
+            if (!model)
+            {
+                let uri = monaco.Uri.parse( `file:///${path}`);
+                model = monaco.editor.createModel( content, "typescript", uri);
+                this.files.set( path, model);
+            }
+            else
+                model.setValue( content);
+
+            this.editor.setModel( model);
+            this.editor.focus();
+        }
+        catch(x)
+        {
+            comp.MsgBox.showModal( `Cannot read file. Error: ${x.message}`, undefined,
+                comp.MsgBoxButtonBar.OK, comp.MsgBoxIcon.Error);
+        }
+    }
+
+    private async onSaveFileAsClicked(): Promise<void>
+    {
+        if (!this.currentFileInfo)
+            return;
+
+        let model = this.files.get( this.currentFileInfo.path);
+        if (!model)
+            return;
+
+        let content = model.getValue();
+
+        // do different things for browser that support File System API and those that don't
+        let showSaveFilePicker = (window as any).showSaveFilePicker;
+        if (showSaveFilePicker)
+        {
+            try
+            {
+                let fileHandle = await showSaveFilePicker({
+                    types: [{
+                        description: 'TypeScript Files',
+                        accept: { 'application/x-typescript': ['.tsx', '.ts'] }
+                    }],
+                    excludeAcceptAllOption: true,
+                    multiple: false
+                })
+
+                let fileStream = await fileHandle.createWritable();
+                await fileStream.write( content);
+                await fileStream.close();
+            }
+            catch(x)
+            {
+            }
+        }
+        else
+        {
+            // create temporary URL and temporary anchor element for downloading; the "download"
+            // attribute and the BLOB URL instruct the browser to download the file instead of
+            // navigating to it.
+            let anchorUrl = URL.createObjectURL( new Blob([content], {type: "text/json;charset=utf-8;"}));
+            let a = document.createElement( "a");
+            a.href = anchorUrl;
+
+            // get the name of the file to download from the current file info object
+            let name = this.currentFileInfo.name;
+            if (!name.endsWith( ".tsx"))
+                name += ".tsx";
+
+            a.download = name;
+
+            // the click handler is only needed to do a clean up
+            let clickHandler = () => setTimeout( () => URL.revokeObjectURL( anchorUrl), 0);
+
+            a.addEventListener( "click", clickHandler);
+            a.click();
+        }
+    }
+
+
 
     private onClearClicked(): void
     {
@@ -578,7 +718,12 @@ class Playground extends mim.Component
     {
         this.clearRighPaneData();
         let fileInfo = this.exampleMap.get( path);
-        if (fileInfo === ScratchPadFileInfo)
+        if (fileInfo === LocalFileInfo)
+        {
+            this.onLoadFileClicked();
+            return;
+        }
+        else if (fileInfo === ScratchPadFileInfo)
         {
             this.addOrSelectFile( ScratchPadFileInfo.path, "");
             this.currentFileInfo = ScratchPadFileInfo;
@@ -756,9 +901,9 @@ class Playground extends mim.Component
     // List of extra libraries read from the extra-lib-list JSON file. It is initially empty.
     private extraLibList: IExtraLibInfo[];
 
-    // Example list read from the example-list JSON file. It initially contains the scratch file
-    // information as the first item.
-    private exampleList: IExampleInfo[] = [ScratchPadFileInfo];
+    // Example list read from the example-list JSON file. It initially contains the local file
+    // and scratch file information as the first items.
+    private exampleList: IExampleInfo[] = [LocalFileInfo, ScratchPadFileInfo];
 
     // Map of example paths to ExampleInfo objects
     private exampleMap = new Map<string,IExampleInfo>();
@@ -769,6 +914,9 @@ class Playground extends mim.Component
     // Current file selected in the monaco editor
     @mim.trigger
     private currentFileInfo: IExampleInfo;
+
+    // Flag indicating that the current file corresponds to a local file and to an example
+    private isCurrentFileLocal: boolean;
 
     // State of the right pane
     @mim.trigger
@@ -786,6 +934,9 @@ class Playground extends mim.Component
 
     // Error objects if something went wrong
     private otherErrors: Error[] = null;
+
+    // Reference to the file input HTML element for loading local files
+    @mim.ref private hiddenFileInputRef: HTMLInputElement;
 
     // Monaco editor object
     public editor: monaco.editor.IStandaloneCodeEditor;
