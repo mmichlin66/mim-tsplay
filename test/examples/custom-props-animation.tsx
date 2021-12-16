@@ -12,13 +12,13 @@ import * as css from "mimcss"
 class MyStyles extends css.StyleDefinition
 {
     // define custom properties whose values will be changed by user actions
-    translate = this.$var( "CssLength", 0)
-    scale = this.$var( "CssNumber", 1)
-    rotate = this.$var( "CssAngle", 0)
+    translate = this.$var( "<length>", 0)
+    scale = this.$var( "<number>", 1)
+    rotate = this.$var( "<angle>", 0)
 
     // define custom properties which will be defined differently under different elements
-    hue = this.$var( "CssAngle")
-    duration = this.$var( "CssTime")
+    hue = this.$var( "<angle>")
+    duration = this.$var( "<time>")
 
     mover = this.$class({
         // define propeties common for all "movers"

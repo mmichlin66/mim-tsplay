@@ -12,9 +12,9 @@ import {CodeSnippetChooser, CodeSnippetParams} from "./CodeSnippets";
 // import some JS files so that they are included into our bundle
 import "monaco-editor/esm/vs/basic-languages/javascript/javascript";
 import "monaco-editor/esm/vs/basic-languages/typescript/typescript";
-import "monaco-editor/esm/vs/language/typescript/languageFeatures";
+// import "monaco-editor/esm/vs/language/typescript/languageFeatures";
 import "monaco-editor/esm/vs/language/typescript/tsMode";
-import "monaco-editor/esm/vs/language/typescript/workerManager";
+// import "monaco-editor/esm/vs/language/typescript/workerManager";
 
 
 
