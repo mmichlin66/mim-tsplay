@@ -41,7 +41,7 @@ class SharedStyles extends css.StyleDefinition
 			[this.elastic, { flex: [1, 1, 0], overflow: "auto" }],
 		],
 		"&": [
-			[css.selector`&${this.spaced} > *`, { marginBlockStart: this.defaultBlockGap, marginBlockEnd: this.defaultBlockGap }],
+			[`&${this.spaced.cssName} > *`, { marginBlockStart: this.defaultBlockGap, marginBlockEnd: this.defaultBlockGap }],
 		]
 	})
 	hbox = this.$class({
@@ -51,7 +51,7 @@ class SharedStyles extends css.StyleDefinition
 			[this.elastic, { flex: [1, 1, 0], overflow: "auto" }],
 		],
 		"&": [
-			[css.selector`&${this.spaced} > *`, { marginInlineStart: this.defaultInlineGap, marginInlineEnd: this.defaultInlineGap }],
+			[`&${this.spaced.cssName} > *`, { marginInlineStart: this.defaultInlineGap, marginInlineEnd: this.defaultInlineGap }],
 		]
 	})
 
