@@ -1,6 +1,6 @@
 {
     "name": "mim-tsplay",
-    "version": "0.1.10",
+    "version": "0.1.11",
     "description": "TypeScript playground with Monaco editor, compilation and HTML presentation",
     "homepage": "https://mmichlin66.github.io/mimcss/guide/introduction.html",
     "repository": "github:mmichlin66/mim-tsplay",
@@ -37,9 +37,9 @@
         "webpack-cli": "^4.9.1"
     },
     "dependencies": {
-        "mimcss": "^0.11.9",
-        "mimbl": "^0.7.2",
-        "mimcl": "^0.7.2",
+        "mimcss": "^0.11.12",
+        "mimbl": "^0.8.1",
+        "mimcl": "^0.8.1",
         "monaco-editor": "^0.31.1"
     },
     "files": [
