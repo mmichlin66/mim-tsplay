@@ -107,7 +107,7 @@ class Playground extends mim.Component
 
     private async postMountInit()
     {
-        let progress = new comp.ProgressBox( "Loading playground configuration...", "Please wait");
+        let progress = new comp.ProgressBox( "Loading playground configuration...", {title: "Please wait"});
         progress.showModal();
 
         // load and parse configuration file
@@ -352,7 +352,7 @@ class Playground extends mim.Component
         // first clear the right panel
         this.clearRighPaneData();
 
-        let progress = new comp.ProgressBox( undefined, "Please wait");
+        let progress = new comp.ProgressBox( undefined, {title: "Please wait"});
         progress.showModalWithDelay( 750);
 
         try
@@ -384,7 +384,7 @@ class Playground extends mim.Component
         if (this.codeSnippetMap.size === 0)
         {
             await comp.MsgBox.showModal( "No code snippets defined in playground configuration",
-                    "Playground", comp.MsgBoxButtonBar.OK, comp.MsgBoxIcon.Info);
+                    {title: "Playground", buttons: comp.MsgBoxButtonBar.OK, icon: comp.MsgBoxIcon.Info});
             return;
         }
 
@@ -481,8 +481,8 @@ class Playground extends mim.Component
         }
         catch(x)
         {
-            comp.MsgBox.showModal( `Cannot read file. Error: ${x.message}`, undefined,
-                comp.MsgBoxButtonBar.OK, comp.MsgBoxIcon.Error);
+            comp.MsgBox.showModal( `Cannot read file. Error: ${x.message}`,
+                {buttons: comp.MsgBoxButtonBar.OK, icon: comp.MsgBoxIcon.Error});
         }
     }
 

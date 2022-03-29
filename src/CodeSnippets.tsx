@@ -105,8 +105,8 @@ export class CodeSnippetParams extends comp.Dialog
 
         if (elmsWithErrors.length > 0)
         {
-            await comp.MsgBox.showModal( "Please provide values for required parameters", "Parameters",
-                comp.MsgBoxButtonBar.OK, comp.MsgBoxIcon.Warning);
+            await comp.MsgBox.showModal( "Please provide values for required parameters",
+                {title: "Parameters", buttons: comp.MsgBoxButtonBar.OK, icon: comp.MsgBoxIcon.Warning});
             return;
         }
 
