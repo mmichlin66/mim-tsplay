@@ -107,7 +107,7 @@ class Playground extends mim.Component
 
     private async postMountInit()
     {
-        let progress = new comp.ProgressBox( "Loading playground configuration...", {title: "Please wait"});
+        let progress = new comp.ProgressBox( "Loading playground configuration...", {caption: "Please wait"});
         progress.showModal();
 
         // load and parse configuration file
@@ -352,7 +352,7 @@ class Playground extends mim.Component
         // first clear the right panel
         this.clearRighPaneData();
 
-        let progress = new comp.ProgressBox( undefined, {title: "Please wait"});
+        let progress = new comp.ProgressBox( undefined, {caption: "Please wait"});
         progress.showModalWithDelay( 750);
 
         try
@@ -384,7 +384,7 @@ class Playground extends mim.Component
         if (this.codeSnippetMap.size === 0)
         {
             await comp.MsgBox.showModal( "No code snippets defined in playground configuration",
-                    {title: "Playground", buttons: comp.MsgBoxButtonBar.OK, icon: comp.MsgBoxIcon.Info});
+                    {caption: "Playground", buttons: comp.MsgBoxButtonBar.OK, icon: comp.MsgBoxIcon.Info});
             return;
         }
 

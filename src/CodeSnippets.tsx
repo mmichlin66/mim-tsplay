@@ -13,7 +13,7 @@ export class CodeSnippetChooser extends comp.Dialog
 {
     constructor( codeSnippetMap: Map<string,ICodeSnippetInfo[]>)
     {
-        super( undefined, "Choose Code Snippet", { escapeReturnValue: null },
+        super( undefined, { caption: "Choose Code Snippet", escapeReturnValue: null },
             { id: "cancel", content: "Cancel", returnValue: null});
 
             this.codeSnippetMap = codeSnippetMap;
@@ -60,7 +60,7 @@ export class CodeSnippetParams extends comp.Dialog
 {
     constructor( snippet: ITemplateCodeSnippetInfo)
     {
-        super( undefined, `${snippet.name} Parameters`);
+        super( undefined, { caption: `${snippet.name} Parameters` });
         this.snippet = snippet;
 
         this.addButton( { id: "ok", content: "OK", callback: () => this.onOKClicked()})
@@ -106,7 +106,7 @@ export class CodeSnippetParams extends comp.Dialog
         if (elmsWithErrors.length > 0)
         {
             await comp.MsgBox.showModal( "Please provide values for required parameters",
-                {title: "Parameters", buttons: comp.MsgBoxButtonBar.OK, icon: comp.MsgBoxIcon.Warning});
+                {caption: "Parameters", buttons: comp.MsgBoxButtonBar.OK, icon: comp.MsgBoxIcon.Warning});
             return;
         }
 
