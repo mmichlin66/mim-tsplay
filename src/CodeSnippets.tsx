@@ -13,7 +13,7 @@ export class CodeSnippetChooser extends comp.Dialog
 {
     constructor( codeSnippetMap: Map<string,ICodeSnippetInfo[]>)
     {
-        super( undefined, { caption: "Choose Code Snippet", escapeReturnValue: null },
+        super( undefined, { caption: "Choose Code Snippet", escapeValue: null },
             { id: "cancel", content: "Cancel", returnValue: null});
 
             this.codeSnippetMap = codeSnippetMap;
