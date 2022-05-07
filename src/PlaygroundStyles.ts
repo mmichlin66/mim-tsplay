@@ -5,71 +5,34 @@ import {sharedStyles} from "./SharedStyles";
 
 export class PlaygroundStyles extends css.StyleDefinition
 {
-    editorToolbarArea = this.$gridarea();
-    editorContentArea = this.$gridarea();
-    htmlToolbarArea = this.$gridarea();
-    htmlContentArea = this.$gridarea();
-    statusbarArea = this.$gridarea();
-    splitterArea = this.$gridarea();
+    // editorToolbarArea = this.$gridarea();
+    // editorContentArea = this.$gridarea();
+    // htmlToolbarArea = this.$gridarea();
+    // htmlContentArea = this.$gridarea();
+    // statusbarArea = this.$gridarea();
+    // splitterArea = this.$gridarea();
 
     masterGrid = this.$class({
         width: "100%",
         height: "100%",
         overflow: "hidden",
         display: "grid",
-        gridTemplateColumns: ["1fr", "auto", "1fr"],
         gridTemplateRows: ["auto", "1fr", "auto"],
-        gridTemplateAreas: [
-            [this.editorToolbarArea, 1,1, 1,1],
-            [this.editorContentArea, 2,1, 2,1],
-            [this.htmlToolbarArea, 1,3, 1,3],
-            [this.htmlContentArea, 2,3, 2,3],
-            [this.statusbarArea, 3,1, 3,3],
-            [this.splitterArea, 1,2, 2,2],
-        ]
     })
 
     panel = this.$class({
         border: [2, "inset"],
         placeSelf: "stretch",
-        minWidth: 200,
-    })
-
-    leftPane = this.$class({
-        "+": this.panel,
-        gridArea: this.editorContentArea,
-    })
-
-    rightPane = this.$class({
-        "+": this.panel,
-        gridArea: this.htmlContentArea,
     })
 
     toolbar = this.$class({
-        backgroundColor: "lightgrey",
+        backgroundColor: "ButtonFace",
         padding: [4, 0],
-    })
-
-    editorToolbar = this.$class({
-        "+": this.toolbar,
-        gridArea: this.editorToolbarArea,
-    })
-
-    htmlToolbar = this.$class({
-        "+": this.toolbar,
-        gridArea: this.htmlToolbarArea,
     })
 
     statusbar = this.$class({
         padding: 4,
-        backgroundColor: "lightgrey",
-        gridArea: this.statusbarArea,
-    })
-
-    splitter = this.$class({
-        width: 8,
-        backgroundColor: "lightgrey",
-        gridArea: this.splitterArea,
+        backgroundColor: "ButtonFace",
     })
 
     iframe = this.$class({

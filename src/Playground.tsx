@@ -178,12 +178,12 @@ class Playground extends mim.Component
 	{
         return <div class={playgroundStyles.masterGrid}>
             {this.renderEditorToolbar}
-            {this.renderHtmlToolbar}
-            <div class={playgroundStyles.leftPane}>
-                <div ref={this.contaierRef} style={{ width: "100%", height: "100%", overflow: "hidden"}} />
-            </div>
-            <div class={playgroundStyles.splitter}></div>
-            {this.renderRightPane}
+            <comp.Splitter>
+                <div class={playgroundStyles.panel}>
+                    <div ref={this.contaierRef} style={{ width: "100%", height: "100%", overflow: "hidden"}} />
+                </div>
+                {this.renderRightPane}
+            </comp.Splitter>
             <div class={playgroundStyles.statusbar}>
                 Current example: <span>{this.currentFileInfo && this.currentFileInfo.name}</span>
             </div>
@@ -192,7 +192,7 @@ class Playground extends mim.Component
 
     private renderEditorToolbar(): any
 	{
-        return <div class={[playgroundStyles.editorToolbar, sharedStyles.spacedHBox]}>
+        return <div class={[playgroundStyles.toolbar, sharedStyles.spacedHBox]}>
             {this.renderExampleList()}
             <button id="run" click={this.onRunClicked} title="Compile code and display results">Run</button>
             <button id="reload" click={this.onReloadClicked} title="Reload original example code" disabled={this.isCurrentFileLocal}>Reload</button>
@@ -202,6 +202,7 @@ class Playground extends mim.Component
             <input type="file" accept=".tsx,.ts" style={{ display: "none"}} ref={this.hiddenFileInputRef} change={this.onHiddenFileSelected} />
             <button id="loadFile" click={this.onLoadFileClicked} title="Load local file">Load File</button>
             <button id="saveFileAs" click={this.onSaveFileAsClicked} title="Save local file under a different name">Save As...</button>
+            <button id="run" click={this.onClearClicked} title="Clear the right pane">Clear</button>
         </div>
     }
 
@@ -259,13 +260,6 @@ class Playground extends mim.Component
         </option>;
     }
 
-    private renderHtmlToolbar(): any
-	{
-        return <div class={[playgroundStyles.htmlToolbar, sharedStyles.spacedHBox]}>
-            <button id="run" click={this.onClearClicked} title="Clear the right pane">Clear</button>
-        </div>
-    }
-
     private renderRightPane(): any
 	{
         let content: any;
@@ -294,7 +288,7 @@ class Playground extends mim.Component
                 break
         }
 
-        return <div class={playgroundStyles.rightPane}>{content}</div>
+        return <div class={playgroundStyles.panel}>{content}</div>
     }
 
     private renderCompilationError( e: ICompilationErrorInfo): any
