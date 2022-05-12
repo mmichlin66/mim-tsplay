@@ -4,7 +4,7 @@
     "extraLibs": [
         {
             "libName": "mimcss",
-            "url": "mimcss",
+            "url": "mimcss.dev",
             "files": [
                 "index.d.ts",
                 "api/CoreTypes.d.ts",
@@ -31,12 +31,16 @@
 
         {
             "libName": "mimbl",
-            "url": "mimbl",
+            "url": "mimbl.dev",
             "files": [
                 "index.d.ts",
-                "utils/EventSlot.d.ts",
-                "utils/TriggerWatcher.d.ts",
                 "api/UtilAPI.d.ts",
+                "api/EventSlotTypes.d.ts",
+                "api/EventSlotAPI.d.ts",
+                "api/TriggerTypes.d.ts",
+                "api/TriggerAPI.d.ts",
+                "api/CompTypes.d.ts",
+                "api/CompAPI.d.ts",
                 "api/HtmlTypes.d.ts",
                 "api/SvgTypes.d.ts",
                 "api/mim.d.ts"

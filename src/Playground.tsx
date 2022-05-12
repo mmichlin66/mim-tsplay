@@ -90,7 +90,8 @@ class Playground extends mim.Component
     {
         // set compiler options
         ts.typescriptDefaults.setCompilerOptions({
-            target: ts.ScriptTarget.ES2016,
+            target: ts.ScriptTarget.ESNext,
+            useDefineForClassFields: false,
             allowNonTsExtensions: true,
             moduleResolution: ts.ModuleResolutionKind.NodeJs,
             module: ts.ModuleKind.CommonJS,
@@ -100,6 +101,7 @@ class Playground extends mim.Component
             experimentalDecorators: true,
             jsx: ts.JsxEmit.React,
             jsxFactory: "mim.jsx",
+            jsxFragmentFactory: "mim.Fragment",
         })
 
         this.callMeAfterUpdate( this.postMountInit);

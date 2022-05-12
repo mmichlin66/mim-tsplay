@@ -52,12 +52,7 @@ function config( isDev)
 
                     { from: "node_modules/mimbl/lib/mimbl" + jsSuffix },
                     { from: "node_modules/mimbl/lib/index.d.ts", to: "mimbl/" },
-                    { from: "node_modules/mimbl/lib/utils/EventSlot.d.ts", to: "mimbl/utils/" },
-                    { from: "node_modules/mimbl/lib/utils/TriggerWatcher.d.ts", to: "mimbl/utils/" },
-                    { from: "node_modules/mimbl/lib/api/UtilAPI.d.ts", to: "mimbl/api/" },
-                    { from: "node_modules/mimbl/lib/api/HtmlTypes.d.ts", to: "mimbl/api/" },
-                    { from: "node_modules/mimbl/lib/api/SvgTypes.d.ts", to: "mimbl/api/" },
-                    { from: "node_modules/mimbl/lib/api/mim.d.ts", to: "mimbl/api/" },
+                    { context: "node_modules/mimbl/lib/api/", from: "*.d.ts", to: "mimbl/api/" },
 
                     { from: "node_modules/mimcl/lib/mimcl" + jsSuffix },
 
