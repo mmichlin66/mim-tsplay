@@ -42,6 +42,7 @@
                 "api/TriggerAPI.d.ts",
                 "api/CompTypes.d.ts",
                 "api/CompAPI.d.ts",
+                "api/ElementTypes.d.ts",
                 "api/HtmlTypes.d.ts",
                 "api/SvgTypes.d.ts",
                 "api/mim.d.ts"
