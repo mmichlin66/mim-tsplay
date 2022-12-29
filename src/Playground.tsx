@@ -104,7 +104,7 @@ class Playground extends mim.Component
             jsxFragmentFactory: "mim.Fragment",
         })
 
-        this.callMeAfterUpdate( this.postMountInit);
+        this.callMe( this.postMountInit, false);
     }
 
     private async postMountInit()
