@@ -1,4 +1,5 @@
 ﻿import * as mim from "mimbl";
+import * as css from "mimcss";
 import * as comp from "mimcl"
 import * as monaco from "monaco-editor";
 import {sharedStyles} from "./SharedStyles";
@@ -88,6 +89,8 @@ class Playground extends mim.Component
 
     public async willMount()
     {
+        css.activate(comp.DefaultPopupTheme)
+
         // set compiler options
         ts.typescriptDefaults.setCompilerOptions({
             target: ts.ScriptTarget.ESNext,
