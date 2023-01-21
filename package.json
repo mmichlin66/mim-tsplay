@@ -2,7 +2,7 @@
     "name": "mim-tsplay",
     "version": "0.1.15",
     "description": "TypeScript playground with Monaco editor, compilation and HTML presentation",
-    "homepage": "https://mmichlin66.github.io/mimcss/guide/introduction.html",
+    "homepage": "https://www.mimcss.com/guide/introduction.html",
     "repository": "github:mmichlin66/mim-tsplay",
     "main": "lib/mim-tsplay.js",
     "module": "./lib/mim-tsplay.js",
@@ -14,7 +14,7 @@
     "author": {
         "name": "Michael Michlin",
         "email": "mmulya@outlook.com",
-        "url": "https://mmichlin66.github.io"
+        "url": "https://www.mimcss.com"
     },
     "keywords": [
         "CSS",
