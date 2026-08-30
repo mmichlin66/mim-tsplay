@@ -370,7 +370,7 @@ class Playground extends mim.Component
         }
         catch( err)
         {
-            this.otherErrors = [err];
+            this.otherErrors = [err as Error];
             this.rightPaneState = RightPaneState.OtherErrors;
         }
 
@@ -480,7 +480,7 @@ class Playground extends mim.Component
         }
         catch(x)
         {
-            comp.MsgBox.showModal( `Cannot read file. Error: ${x.message}`,
+            comp.MsgBox.showModal( `Cannot read file. Error: ${ (x as Error).message}`,
                 {buttons: comp.MsgBoxButtonBar.OK, icon: comp.MsgBoxIcon.Error});
         }
     }
@@ -589,7 +589,7 @@ class Playground extends mim.Component
         catch( err)
         {
             this.config = {};
-            errors.push(err);
+            errors.push(err as Error);
         }
 
         this.addExtraLibs( this.config.extraLibs, errors, progress);
@@ -617,7 +617,7 @@ class Playground extends mim.Component
         }
         catch( err)
         {
-            errors.push(err);
+            errors.push(err as Error);
         }
     }
 
@@ -658,7 +658,7 @@ class Playground extends mim.Component
                 }
                 catch( err)
                 {
-                    errors.push( err);
+                    errors.push( err as Error);
                 }
             }
         }
@@ -738,7 +738,7 @@ class Playground extends mim.Component
             }
             catch( err)
             {
-                this.otherErrors = [err];
+                this.otherErrors = [err as Error];
                 this.rightPaneState = RightPaneState.OtherErrors;
             }
         }

@@ -3,7 +3,6 @@
     "readme": "none",
     "name": "Mim-tsplay Reference",
 	"excludeExternals": true,
-	"excludeNotExported": true,
     "excludePrivate": true,
     "ignoreCompilerErrors": true,
 	"out": "./reference",
