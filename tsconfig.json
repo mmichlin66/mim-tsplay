@@ -16,7 +16,7 @@
         "noEmitOnError": true,
         "module": "esnext",
         "moduleResolution": "bundler",
-        "useDefineForClassFields": true,
+        "useDefineForClassFields": false,
         "removeComments": false,
 		"target": "ES2022",
 		"lib": [ "esnext", "dom" ],
